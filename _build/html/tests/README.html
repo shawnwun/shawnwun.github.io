@@ -1,0 +1,197 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Running nosetests &mdash; PyDial 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="PyDial 1.0.0 documentation" href="../index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="running-nosetests">
+<h1>Running nosetests<a class="headerlink" href="#running-nosetests" title="Permalink to this headline">¶</a></h1>
+<ul>
+<li><p class="first">Requirements:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">pip</span> <span class="n">install</span> <span class="n">nose</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">run tests easily via (from the repository root):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">nosetests</span> <span class="o">-</span><span class="n">v</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">These run tests written in /tests/</p>
+</li>
+<li><p class="first">a <strong>.noserc</strong> file is in the repository but must be copied to your home directory (cp .noserc ~/.noserc) to have any effect.</p>
+</li>
+</ul>
+<div class="section" id="general-notes">
+<h2>GENERAL NOTES:<a class="headerlink" href="#general-notes" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">[May 2016, David V.]</p>
+</div>
+<ul>
+<li><p class="first"><strong>These are not unit tests</strong>; they test higher capabilities, like can simulate run for example and are meant to be just basic tests that
+the repository is not broken. It is envisaged that they&#8217;ll be run before git commits and pushes for example.</p>
+</li>
+<li><p class="first">Any one who wants to write actual unit tests is welcome to add these to the repository...</p>
+</li>
+<li><p class="first">There are some odd looking python path adjustments at the start of the test_X.py files. These aren&#8217;t needed in general, but tests wheren&#8217;t
+running on camdial for example without them. They look like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span><span class="o">,</span><span class="nn">sys</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">curdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="n">__file__</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">curdir</span> <span class="o">=</span> <span class="n">curdir</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">curdir</span> <span class="o">=</span> <span class="s">&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">curdir</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span><span class="s">&#39;/&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">curdir</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+<div class="section" id="other-useful-tools">
+<h2><strong>Other useful tools</strong><a class="headerlink" href="#other-useful-tools" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">The following python tools are really helpful for checking your code in various ways (well basically just <em>speed</em> and <em>quality</em>)</p>
+</li>
+<li><p class="first"><strong>pylint</strong>: detects outright errors but otherwise gives suggestions on code styles and conventions. Simply run, for example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">pylint</span> <span class="n">Simulate</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first"><strong>cProfile</strong>: Full profiling of every method called in executing some python code (including imported methods from the standard library etc).
+cProfile is part of the python std lib. Simply run, for example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">cProfile</span> <span class="n">Simulate</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">c</span> <span class="n">_config</span><span class="o">/</span><span class="n">simulate_multiDomains_HDC</span><span class="o">.</span><span class="n">cfg</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first"><strong>profilehooks</strong>: great for profiling individual methods. Uses decorators to do so. Requires installing:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">pip</span> <span class="n">install</span> <span class="n">profilehooks</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../Docs/index.html">
+    <img class="logo" src="../_static/../../../Docs/cued_logo.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyDial</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Docs/Adding.html">How to add content to these pages</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Docs/GeneralNotes.html">General System  Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Docs/Agent.html">Agent - the Complete Dialogue System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Docs/BeliefTracking.html">Belief Tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Docs/Evaluation.html">Evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Docs/Ontology.html">Ontology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Docs/NLGeneration.html">Natural Language Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Docs/Policy.html">Policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Docs/SemanticParsing.html">Semantic Parsing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Docs/SemanticBeliefTracking.html">Semantic Belief Tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Docs/Simulation.html">Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Docs/Systems.html">Dialogue Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Docs/Tests.html">Tests executed by nosetests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Docs/TopicTracking.html">Topic Tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Docs/Utilities.html">Utility Modules</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Docs/Papers.html">Interesting / Relevant Papers</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../Docs/index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, Dongho Kim, David Vandyke, Lina Rojas, Milica Gasic, Stefan Ultes, Steve Young.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.1.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster </a>
+      
+      |
+      <a href="../_sources/tests/README.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

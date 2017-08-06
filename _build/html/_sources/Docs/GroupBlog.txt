@@ -1,0 +1,43 @@
+*****************************************
+Group Noticeboard/Blog
+*****************************************
+Record ideas/images etc about proposed approaches etc.
+   
+
+Multi-Domain Problems & Research Issues
+#######################################
+
+
+Architecture
+*************
+- **[9th Oct 2015]** :download:`Graphic of potential architecture   <images/CUED-ODSDS-Arch.pdf>`
+
+Simulated User
+***************
+- **Conditional generation of Goal**:  
+- **Conditional behaviour**: 
+-
+
+Topic Tracker
+**************
+- classifier?
+- controller?
+
+
+Semantic Input Parsing
+****************************************
+- required?
+- best approach for python? NLTK?
+
+
+Global Belief State
+********************
+- pure abstraction? 
+- 
+
+
+Speech System
+##############
+
+- **[2nd Nov 2015]** :download:`Graphic of High Level Speech API  <images/SpeechServer.pdf>`
+

@@ -1,0 +1,10 @@
+*****************************************
+Interesting / Relevant Papers
+*****************************************
+ 
+Please suggest *key/important/quality* papers that should be of broad interest to the whole group. They can be presented (10mins) at our weekly meeting. 
+
+
+- **[6th Nov 2015, djv27]** `Topic tracking as an RL problem  <http://emnlp2014.org/papers/pdf/EMNLP2014007.pdf>`_.
+- **[5th Nov 2015, lmr46]** `A domain-independent statistical methodology for dialog management in spoken dialog systems  <http://www.sciencedirect.com/science/article/pii/S0885230813000612>`_.
+

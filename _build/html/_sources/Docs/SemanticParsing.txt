@@ -1,0 +1,14 @@
+Semantic Parsing
+*********************
+
+.. |.| raw:: html
+
+   <br />
+   
+   
+.. automodule:: semi.RegexSemI
+   :members:
+
+.. automodule:: semi.SemI
+    :members:
+

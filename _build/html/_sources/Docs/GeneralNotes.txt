@@ -1,0 +1,95 @@
+**********************
+General System  Notes
+**********************
+
+.. |.| raw:: html
+
+   <br />
+   
+
+Config files
+##################################
+Firstly, all configs are formatted based on the python **ConfigParser** module. The **/config** directory in the repository has working configs for several scenarios.  Some key config sections are described below: 
+
+[DEFAULT]
+*********
+- root = '' 
+    *git repo root. Used when running on grid etc.*
+- domains = CamRestaurants,Laptops11
+    *List of domain tags that can occur in simulate dialog. Policy options for each domain tag should also be set in the config (see below).* 
+- conditionalsimuser = True 
+    *Boolean controlling whether each domain is treated independently or conditionally by the multidomain simulated user manager*
+- maxdomainsperdialog = 3 
+    *However many domain tags are given by the above domains config setting, this sets a limit on how many domains can be involved in each dialog*
+
+[voicehub]
+        Check the name of the host and port where the dialogue server will be running. Then set the host and port in the config 
+        files of the VoiceServer and the dialogue server: The variables dialhost, dialport must be set.
+        Run the dialogue server: python DialogueServer.py -C /config/voicehub.cfg
+        Run Cornelia (VoiceServer) and wait for a call.
+        See _a link: https://lmr46@bitbucket.org/lmr46/voiceserver.git
+
+[policy]
+********
+- bcm
+
+This section, [policy], is the only policy config section that is domain independent. The policy settings for each domain are set with **DOMAINTAGS** as shown below. 
+Note that a list of domain tags may be found in **Settings.py**.
+
+[policy_DOMAINTAG]
+******************
+- belieftype = focus
+- useconfreq = False
+- policytype = gp
+- learning = True   
+- startwithhello = False
+- inpolicyfile = test   *----If not set, but learning, then starts from a pure random policy*
+- outpolicyfile = _gptraining/out-gpCamRestaurants
+
+
+[gppolicy_DOMAINTAG]
+*********************
+- kernel = polysort
+
+[gpsarsa_DOMAINTAG]
+*******************
+- random = False
+- scale = 3
+- saveasprior = True
+- numprior = 1
+
+[logging]
+*********
+- usecolor = True 
+    *Boolean indicating whether logger should print output in color or not. A general point to note, when dumping simulate.py runs to file, the context logger output colour indcators are dumped as ugly ASCII characters that appear everywhere. User the flag* **--nocolor** *to run the context logger in black and white and get a presentable file.* 
+
+
+
+Running policy training via simulate on the grid
+##################################################
+- Some scripts are available in **./scripts/**. This included GP training/testing scripts and printing tools for 
+  grid training. 
+  
+  .. warning::
+    these are bare bones and still need work for extra functionality, (saveasprior for example)
+
+- Note that the HPC facilities are also available. 
+
+The original single-domain system
+##################################
+The original python system that Dongho Kim wrote it noted with the git tag **dksystem**. 
+This system assumed you would only be running simulate, texthub etc in the one single domain. 
+
+You can access it via the git tag, checking it out onto a new branch as follows::
+
+    >> git checkout -b <BRANCH-NAME>  dksystem
+
+where <BRANCH-NAME> is your choice.
+
+TODO - System is currently missing the following:
+#################################################
+- RNN tracker
+- Generator
+- RNN evaluator
+- SemI system if not using RNN(ASR input) tracker in full system/for trials
+- working topic tracker

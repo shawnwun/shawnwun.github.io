@@ -1,0 +1,221 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Belief Tracking &mdash; PyDial 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="PyDial 1.0.0 documentation" href="../index.html" />
+    <link rel="next" title="Evaluation" href="Evaluation.html" />
+    <link rel="prev" title="Agent - the Complete Dialogue System" href="Agent.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="belief-tracking">
+<h1>Belief Tracking<a class="headerlink" href="#belief-tracking" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-belieftracking.baseline"></span><div class="section" id="baseline-py-baseline-belief-tracker-from-dst">
+<h2>baseline.py - Baseline Belief Tracker from DST<a class="headerlink" href="#baseline-py-baseline-belief-tracker-from-dst" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This is (essentially) the baseline.py file from the DSTC challenge written by Matt Henderson. It implements the
+&#8220;Baseline&#8221; and &#8220;Focus&#8221; trackers from the DSTC challenge. Some unused things have been removed from the DST version
+here - just to keep our python dialogue system simple.</p>
+</div>
+<p>Copyright CUED Dialogue Systems Group 2015, 2016</p>
+<blockquote>
+<div>import <a class="reference internal" href="Utilities.html#module-utils.Settings" title="utils.Settings"><tt class="xref py py-class docutils literal"><span class="pre">utils.Settings</span></tt></a> <br />
+import <tt class="xref py py-class docutils literal"><span class="pre">SummaryMapping</span></tt> <br />
+import <tt class="xref py py-class docutils literal"><span class="pre">dact</span></tt> <br />
+import <a class="reference internal" href="Utilities.html#module-utils.ContextLogger" title="utils.ContextLogger"><tt class="xref py py-class docutils literal"><span class="pre">utils.ContextLogger</span></tt></a></div></blockquote>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">documentation not complete</p>
+</div>
+</div>
+<hr class="docutils" />
+<span class="target" id="module-belieftracking.BeliefTracker"></span><div class="section" id="belieftrackerrules-py-belief-tracker">
+<h2>BeliefTrackerRules.py - Belief Tracker<a class="headerlink" href="#belieftrackerrules-py-belief-tracker" title="Permalink to this headline">¶</a></h2>
+<p>Copyright CUED Dialogue Systems Group 2015, 2016</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>CUED Imports/Dependencies: </p>
+<p class="last">import <a class="reference internal" href="Utilities.html#module-utils.Settings" title="utils.Settings"><tt class="xref py py-class docutils literal"><span class="pre">utils.Settings</span></tt></a> <br />
+import <a class="reference internal" href="Policy.html#module-policy.SummaryMapping" title="policy.SummaryMapping"><tt class="xref py py-class docutils literal"><span class="pre">policy.SummaryMapping</span></tt></a> <br />
+import <tt class="xref py py-class docutils literal"><span class="pre">dact</span></tt> <br />
+import <tt class="xref py py-class docutils literal"><span class="pre">BeliefTrackingUtils</span></tt> <br />
+import <a class="reference internal" href="Utilities.html#module-utils.ContextLogger" title="utils.ContextLogger"><tt class="xref py py-class docutils literal"><span class="pre">utils.ContextLogger</span></tt></a></p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">documentation not complete</p>
+</div>
+<hr class="docutils" />
+<dl class="class">
+<dt id="belieftracking.BeliefTracker.BeliefTracker">
+<em class="property">class </em><tt class="descclassname">belieftracking.BeliefTracker.</tt><tt class="descname">BeliefTracker</tt><big>(</big><em>domainString</em><big>)</big><a class="headerlink" href="#belieftracking.BeliefTracker.BeliefTracker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Belief Tracker base class that implements most of the functionality within the dialogue system. The actual inference
+problem of belief tracking (ASR/SLU &#8211;&gt; belief state update) is implemented by individual trackers (in baseline.py for example). 
+Hence this class will never be instantiated, it just implements common functionality.
+If developing a new tracker - it should inherit this class and implement a self.tracker.</p>
+<dl class="method">
+<dt id="belieftracking.BeliefTracker.BeliefTracker.getBelief80_pairs">
+<tt class="descname">getBelief80_pairs</tt><big>(</big><big>)</big><a class="headerlink" href="#belieftracking.BeliefTracker.BeliefTracker.getBelief80_pairs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called by EXITING DOMAIN</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="belieftracking.BeliefTracker.BeliefTracker.get_conditional_constraints">
+<tt class="descname">get_conditional_constraints</tt><big>(</big><em>prev_domain_constraints</em><big>)</big><a class="headerlink" href="#belieftracking.BeliefTracker.BeliefTracker.get_conditional_constraints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called by ENTERING DOMAIN
+Takes a dict (keys=all available domains we have &#8211; more info this way than just a list of 
+slots + values) of constraints from previous domains AS DETERMINED BY THE DIALOGS IN THOSE 
+DOMAINS WITH THE DOMAINS OWN TRACKER - then conditionally initialises the new tracker. 
+(Meaning this is only called when domain is first launched within a single dialog).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>prev_domain_constraints</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns None:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="belieftracking.BeliefTracker.BeliefTracker.update_belief_state">
+<tt class="descname">update_belief_state</tt><big>(</big><em>lastact</em>, <em>obs</em>, <em>constraints=None</em><big>)</big><a class="headerlink" href="#belieftracking.BeliefTracker.BeliefTracker.update_belief_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Does the actual belief tracking via tracker.addTurn</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="../_static/../../../Docs/cued_logo.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyDial</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Adding.html">How to add content to these pages</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="GeneralNotes.html">General System  Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Agent.html">Agent - the Complete Dialogue System</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Belief Tracking</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#baseline-py-baseline-belief-tracker-from-dst">baseline.py - Baseline Belief Tracker from DST</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#belieftrackerrules-py-belief-tracker">BeliefTrackerRules.py - Belief Tracker</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Evaluation.html">Evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Ontology.html">Ontology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="NLGeneration.html">Natural Language Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policy.html">Policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SemanticParsing.html">Semantic Parsing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SemanticBeliefTracking.html">Semantic Belief Tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Simulation.html">Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Systems.html">Dialogue Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tests.html">Tests executed by nosetests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="TopicTracking.html">Topic Tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Utilities.html">Utility Modules</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Papers.html">Interesting / Relevant Papers</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="Agent.html" title="previous chapter">Agent - the Complete Dialogue System</a></li>
+      <li>Next: <a href="Evaluation.html" title="next chapter">Evaluation</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, Dongho Kim, David Vandyke, Lina Rojas, Milica Gasic, Stefan Ultes, Steve Young.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.1.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster </a>
+      
+      |
+      <a href="../_sources/Docs/BeliefTracking.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,964 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Simulation &mdash; PyDial 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="PyDial 1.0.0 documentation" href="../index.html" />
+    <link rel="next" title="Dialogue Systems" href="Systems.html" />
+    <link rel="prev" title="Semantic Belief Tracking" href="SemanticBeliefTracking.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="simulation">
+<h1>Simulation<a class="headerlink" href="#simulation" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-usersimulator.SimulatedUsersManager"></span><div class="section" id="simulatedusersmanager-py-combines-simulated-components-into-functional-simulator">
+<h2>SimulatedUsersManager.py -combines simulated components into functional simulator<a class="headerlink" href="#simulatedusersmanager-py-combines-simulated-components-into-functional-simulator" title="Permalink to this headline">¶</a></h2>
+<p>Copyright CUED Dialogue Systems Group 2015, 2016</p>
+<dl class="docutils">
+<dt><strong>Basic Usage</strong>: </dt>
+<dd><div class="first last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">UserSimulator</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">simulator</span> <span class="o">=</span> <span class="n">UserSimulator</span><span class="o">.</span><span class="n">CuedUserSimulator</span><span class="p">()</span>  
+</pre></div>
+</div>
+</dd>
+<dt>Then set it up for a dialogue by:</dt>
+<dd><div class="first last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">simulator</span><span class="o">.</span><span class="n">restart</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt>Obtain user response by:</dt>
+<dd><div class="first last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">user_act</span> <span class="o">=</span> <span class="n">simulator</span><span class="o">.</span><span class="n">act_on</span><span class="p">(</span><span class="n">sys_act</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt>A turn level reward can be obtained by:</dt>
+<dd><div class="first last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">reward</span> <span class="o">=</span> <span class="n">simulator</span><span class="o">.</span><span class="n">get_reward</span><span class="p">()</span> 
+</pre></div>
+</div>
+</dd>
+</dl>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>CUED Imports/Dependencies: </p>
+<p class="last">import <tt class="xref py py-class docutils literal"><span class="pre">UserModel</span></tt> <br />
+import <tt class="xref py py-class docutils literal"><span class="pre">ErrorSimulator</span></tt> <br />
+import <tt class="xref py py-class docutils literal"><span class="pre">Settings</span></tt> <br />
+import <tt class="xref py py-class docutils literal"><span class="pre">Ontology</span></tt> <br />
+import <tt class="xref py py-class docutils literal"><span class="pre">DiaAct</span></tt> <br />
+import <a class="reference internal" href="Utilities.html#module-utils.ContextLogger" title="utils.ContextLogger"><tt class="xref py py-class docutils literal"><span class="pre">utils.ContextLogger</span></tt></a></p>
+</div>
+<hr class="docutils" />
+<dl class="class">
+<dt id="usersimulator.SimulatedUsersManager.DomainsSimulatedUser">
+<em class="property">class </em><tt class="descclassname">usersimulator.SimulatedUsersManager.</tt><tt class="descname">DomainsSimulatedUser</tt><big>(</big><em>domainString</em>, <em>conf_scorer_name</em>, <em>error_rate</em><big>)</big><a class="headerlink" href="#usersimulator.SimulatedUsersManager.DomainsSimulatedUser" title="Permalink to this definition">¶</a></dt>
+<dd><p>User Simulator for a single domain. Comprised of a behaviour component: <tt class="xref py py-class docutils literal"><span class="pre">UserModel</span></tt> to produce a semantic act
+and an error simulator to produce from the semantic act a list of semantic hypotheses.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>str</strong> &#8211; domain string</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="usersimulator.SimulatedUsersManager.DomainsSimulatedUser.act_on">
+<tt class="descname">act_on</tt><big>(</big><em>sys_act_string</em><big>)</big><a class="headerlink" href="#usersimulator.SimulatedUsersManager.DomainsSimulatedUser.act_on" title="Permalink to this definition">¶</a></dt>
+<dd><p>Thru the UserModel member, receives the system action and then responds.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>sys_act_string</strong> (<em>unicode str</em>) &#8211; system action</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">(str) user action</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="usersimulator.SimulatedUsersManager.DomainsSimulatedUser.restart">
+<tt class="descname">restart</tt><big>(</big><em>otherDomainsConstraints</em><big>)</big><a class="headerlink" href="#usersimulator.SimulatedUsersManager.DomainsSimulatedUser.restart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets all components (<strong>User Model</strong>) that are statefull.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>otherDomainsConstraints</strong> (<em>list</em>) &#8211; of domain goal tuples (slot=val)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="usersimulator.SimulatedUsersManager.SimulatedUsersManager">
+<em class="property">class </em><tt class="descclassname">usersimulator.SimulatedUsersManager.</tt><tt class="descname">SimulatedUsersManager</tt><big>(</big><em>error_rate</em><big>)</big><a class="headerlink" href="#usersimulator.SimulatedUsersManager.SimulatedUsersManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>The multidomain simulated user, which is made up of a dictionary of simulated users indexed by domain. 
+:param (list): of domain strings</p>
+<dl class="method">
+<dt id="usersimulator.SimulatedUsersManager.SimulatedUsersManager.act_on">
+<tt class="descname">act_on</tt><big>(</big><em>sys_act</em><big>)</big><a class="headerlink" href="#usersimulator.SimulatedUsersManager.SimulatedUsersManager.act_on" title="Permalink to this definition">¶</a></dt>
+<dd><p>First produce a single semantic act from the simulated user. Then create from it a list of semantic hypotheses which
+include simulated errors.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="usersimulator.SimulatedUsersManager.SimulatedUsersManager.restart">
+<tt class="descname">restart</tt><big>(</big><big>)</big><a class="headerlink" href="#usersimulator.SimulatedUsersManager.SimulatedUsersManager.restart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Restarts/boots up the selected domains simulated user components. Shuts down those running and not needed for 
+the next dialog.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>None</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="usersimulator.SimulatedUsersManager.SimulatedUsersManager.sample_domains">
+<tt class="descname">sample_domains</tt><big>(</big><big>)</big><a class="headerlink" href="#usersimulator.SimulatedUsersManager.SimulatedUsersManager.sample_domains" title="Permalink to this definition">¶</a></dt>
+<dd><p>Randomly select a set of domains from those available. 
+The selected domains will be used by the simulated user over a single dialog.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>None</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="usersimulator.SimulatedUsersManager.SimulatedUsersManager.set_allowed_codomains">
+<tt class="descname">set_allowed_codomains</tt><big>(</big><em>ROOTDOMAIN</em><big>)</big><a class="headerlink" href="#usersimulator.SimulatedUsersManager.SimulatedUsersManager.set_allowed_codomains" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets member (list) <em>allowed_codomains</em> given a root domain name (ie the domain of the first constraint)
+Uses the hardcoded rules in Settings.py to do so. Also, based on determined allowed_codomains, sets
+the probability of each being included, independently.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ROOTDOMAIN</strong> (<em>str</em>) &#8211; domain tag</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<span class="target" id="module-usersimulator.ConfidenceScorer"></span><div class="section" id="confidencescorer-py">
+<h2>ConfidenceScorer.py -<a class="headerlink" href="#confidencescorer-py" title="Permalink to this headline">¶</a></h2>
+<p>Copyright CUED Dialogue Systems Group 2015, 2016</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>CUED Imports/Dependencies: </p>
+<p class="last">None</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Documentation not done</p>
+</div>
+<hr class="docutils" />
+<dl class="class">
+<dt id="usersimulator.ConfidenceScorer.AdditiveConfidenceScorer">
+<em class="property">class </em><tt class="descclassname">usersimulator.ConfidenceScorer.</tt><tt class="descname">AdditiveConfidenceScorer</tt><big>(</big><em>topProb1</em>, <em>rescale</em><big>)</big><a class="headerlink" href="#usersimulator.ConfidenceScorer.AdditiveConfidenceScorer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Additive confidence scoring of TODO</p>
+<dl class="method">
+<dt id="usersimulator.ConfidenceScorer.AdditiveConfidenceScorer.assignConfScores">
+<tt class="descname">assignConfScores</tt><big>(</big><em>dapl</em><big>)</big><a class="headerlink" href="#usersimulator.ConfidenceScorer.AdditiveConfidenceScorer.assignConfScores" title="Permalink to this definition">¶</a></dt>
+<dd><p>&#64;param dapl: N-best list of DiaAct</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<span class="target" id="module-usersimulator.ConfusionModel"></span><div class="section" id="confusionmodel-py-handcrafted-semi-error-creator">
+<h2>ConfusionModel.py - handcrafted SemI error creator<a class="headerlink" href="#confusionmodel-py-handcrafted-semi-error-creator" title="Permalink to this headline">¶</a></h2>
+<p>Copyright CUED Dialogue Systems Group 2015, 2016</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>CUED Imports/Dependencies: </p>
+<p class="last">import <tt class="xref py py-class docutils literal"><span class="pre">DiaAct</span></tt> <br />
+import <a class="reference internal" href="Ontology.html#module-ontology.Ontology" title="ontology.Ontology"><tt class="xref py py-class docutils literal"><span class="pre">ontology.Ontology</span></tt></a> <br />
+import <a class="reference internal" href="Utilities.html#module-utils.Settings" title="utils.Settings"><tt class="xref py py-class docutils literal"><span class="pre">utils.Settings</span></tt></a> <br />
+import <a class="reference internal" href="Utilities.html#module-utils.ContextLogger" title="utils.ContextLogger"><tt class="xref py py-class docutils literal"><span class="pre">utils.ContextLogger</span></tt></a></p>
+</div>
+<hr class="docutils" />
+<dl class="class">
+<dt id="usersimulator.ConfusionModel.EMConfusionModel">
+<em class="property">class </em><tt class="descclassname">usersimulator.ConfusionModel.</tt><tt class="descname">EMConfusionModel</tt><a class="headerlink" href="#usersimulator.ConfusionModel.EMConfusionModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for EMRandomConfusionModel.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Used through derived class only.</p>
+</div>
+<dl class="method">
+<dt id="usersimulator.ConfusionModel.EMConfusionModel.create_wrong_hyp">
+<tt class="descname">create_wrong_hyp</tt><big>(</big><em>a_u</em><big>)</big><a class="headerlink" href="#usersimulator.ConfusionModel.EMConfusionModel.create_wrong_hyp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a wrong hypothesis for a_u</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>a_u</strong> (<em>instance</em>) &#8211; of <tt class="xref py py-class docutils literal"><span class="pre">DiaAct</span></tt></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">(instance) of <tt class="xref py py-class docutils literal"><span class="pre">DiaAct</span></tt> - modified input act</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="usersimulator.ConfusionModel.EMRandomConfusionModel">
+<em class="property">class </em><tt class="descclassname">usersimulator.ConfusionModel.</tt><tt class="descname">EMRandomConfusionModel</tt><big>(</big><em>domainString</em><big>)</big><a class="headerlink" href="#usersimulator.ConfusionModel.EMRandomConfusionModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Derived class from <a class="reference internal" href="#usersimulator.ConfusionModel.EMConfusionModel" title="usersimulator.ConfusionModel.EMConfusionModel"><tt class="xref py py-class docutils literal"><span class="pre">EMConfusionModel</span></tt></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>None</strong> &#8211; </td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="usersimulator.ConfusionModel.EMRandomConfusionModel.confuse_hyp">
+<tt class="descname">confuse_hyp</tt><big>(</big><em>a_u</em><big>)</big><a class="headerlink" href="#usersimulator.ConfusionModel.EMRandomConfusionModel.confuse_hyp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Randomly confuse the act type, slot or value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>a_u</strong> (<em>instance</em>) &#8211; of <tt class="xref py py-class docutils literal"><span class="pre">DiaAct</span></tt></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">(instance) of <tt class="xref py py-class docutils literal"><span class="pre">DiaAct</span></tt> - modified input act</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<span class="target" id="module-usersimulator.ErrorModel"></span><div class="section" id="errormodel-py-error-simulation">
+<h2>ErrorModel.py - error simulation<a class="headerlink" href="#errormodel-py-error-simulation" title="Permalink to this headline">¶</a></h2>
+<p>Copyright CUED Dialogue Systems Group 2015, 2016</p>
+<p><strong>Relevant Config variables</strong> [Default values]:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="n">em</span><span class="p">]</span>
+<span class="n">nbestsize</span> <span class="o">=</span> <span class="mi">1</span> 
+<span class="n">confusionmodel</span> <span class="o">=</span> <span class="n">RandomConfusions</span>
+<span class="n">nbestgeneratormodel</span> <span class="o">=</span> <span class="n">UniformNBestGenerator</span>
+</pre></div>
+</div>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>CUED Imports/Dependencies: </p>
+<p class="last">import <tt class="xref py py-class docutils literal"><span class="pre">ConfusionModel</span></tt> <br />
+import <tt class="xref py py-class docutils literal"><span class="pre">NBestGenerator</span></tt> <br />
+import <a class="reference internal" href="Utilities.html#module-utils.Settings" title="utils.Settings"><tt class="xref py py-class docutils literal"><span class="pre">utils.Settings</span></tt></a> <br />
+import <a class="reference internal" href="Utilities.html#module-utils.ContextLogger" title="utils.ContextLogger"><tt class="xref py py-class docutils literal"><span class="pre">utils.ContextLogger</span></tt></a></p>
+</div>
+<hr class="docutils" />
+<dl class="class">
+<dt id="usersimulator.ErrorModel.EM">
+<em class="property">class </em><tt class="descclassname">usersimulator.ErrorModel.</tt><tt class="descname">EM</tt><big>(</big><em>domainString</em><big>)</big><a class="headerlink" href="#usersimulator.ErrorModel.EM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main class for error simulation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>None</strong> &#8211; </td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="usersimulator.ErrorModel.EM.getNBest">
+<tt class="descname">getNBest</tt><big>(</big><em>a_u</em><big>)</big><a class="headerlink" href="#usersimulator.ErrorModel.EM.getNBest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of simulated semantic hypotheses given the true act a_u</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>a_u</strong> (<em>str</em>) &#8211; None</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">(instance)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="usersimulator.ErrorModel.EM.setErrorRate">
+<tt class="descname">setErrorRate</tt><big>(</big><em>err</em><big>)</big><a class="headerlink" href="#usersimulator.ErrorModel.EM.setErrorRate" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>err</strong> (<em>int</em>) &#8211; error rate</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<span class="target" id="module-usersimulator.ErrorSimulator"></span><div class="section" id="errorsimulator-py-error-simulation">
+<h2>ErrorSimulator.py - error simulation<a class="headerlink" href="#errorsimulator-py-error-simulation" title="Permalink to this headline">¶</a></h2>
+<p>Copyright CUED Dialogue Systems Group 2015, 2016</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>CUED Imports/Dependencies: </p>
+<p class="last">import <tt class="xref py py-class docutils literal"><span class="pre">ConfidenceScorer</span></tt> <br />
+import <tt class="xref py py-class docutils literal"><span class="pre">ErrorModel</span></tt> <br />
+import <tt class="xref py py-class docutils literal"><span class="pre">DiaAct</span></tt> <br />
+import <a class="reference internal" href="Utilities.html#module-utils.ContextLogger" title="utils.ContextLogger"><tt class="xref py py-class docutils literal"><span class="pre">utils.ContextLogger</span></tt></a></p>
+</div>
+</div>
+<hr class="docutils" />
+<span class="target" id="module-usersimulator.NBestGenerator"></span><div class="section" id="nbestgenerator-py">
+<h2>NBestGenerator.py -<a class="headerlink" href="#nbestgenerator-py" title="Permalink to this headline">¶</a></h2>
+<p>Copyright CUED Dialogue Systems Group 2015, 2016</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>CUED Imports/Dependencies: </p>
+<p class="last">import <a class="reference internal" href="Utilities.html#module-utils.Settings" title="utils.Settings"><tt class="xref py py-class docutils literal"><span class="pre">utils.Settings</span></tt></a> <br />
+import <a class="reference internal" href="Utilities.html#module-utils.ContextLogger" title="utils.ContextLogger"><tt class="xref py py-class docutils literal"><span class="pre">utils.ContextLogger</span></tt></a></p>
+</div>
+<hr class="docutils" />
+<dl class="class">
+<dt id="usersimulator.NBestGenerator.EMNBestGenerator">
+<em class="property">class </em><tt class="descclassname">usersimulator.NBestGenerator.</tt><tt class="descname">EMNBestGenerator</tt><a class="headerlink" href="#usersimulator.NBestGenerator.EMNBestGenerator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tool for generating random semantic errors.</p>
+<dl class="method">
+<dt id="usersimulator.NBestGenerator.EMNBestGenerator.getNBest">
+<tt class="descname">getNBest</tt><big>(</big><em>a_u</em><big>)</big><a class="headerlink" href="#usersimulator.NBestGenerator.EMNBestGenerator.getNBest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an N-best list of dialogue acts of length nbest_size.
+Each entry is a random confusion of the given dialogue act a_u with probability e (errorRate).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>a_u</strong> (<em>instance</em>) &#8211; of <tt class="xref py py-class docutils literal"><span class="pre">DiaActWithProb</span></tt></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="usersimulator.NBestGenerator.EMSampledNBestGenerator">
+<em class="property">class </em><tt class="descclassname">usersimulator.NBestGenerator.</tt><tt class="descname">EMSampledNBestGenerator</tt><big>(</big><em>confusion_model</em>, <em>nbest_size</em><big>)</big><a class="headerlink" href="#usersimulator.NBestGenerator.EMSampledNBestGenerator" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Dirichlet collection NBest generator operates by sampling a length for the N-best list and then
+sampling from a specific Dirichlet for that length.</p>
+<p>This is a derived class from base <tt class="xref py py-class docutils literal"><span class="pre">NBestGenerator</span></tt></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>confusion_model</strong> (<em>instance</em>) &#8211; of <tt class="xref py py-class docutils literal"><span class="pre">ConfusionModel</span></tt></li>
+<li><strong>nbest_size</strong> (<em>int</em>) &#8211; None</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The original C++ implementation did not sample N which is the length of the N-best list.</p>
+</div>
+<dl class="method">
+<dt id="usersimulator.NBestGenerator.EMSampledNBestGenerator.getNBest">
+<tt class="descname">getNBest</tt><big>(</big><em>a_u</em><big>)</big><a class="headerlink" href="#usersimulator.NBestGenerator.EMSampledNBestGenerator.getNBest" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>a_u</strong> (<em>instance</em>) &#8211; of <tt class="xref py py-class docutils literal"><span class="pre">DiaActWithProb</span></tt></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">(list) of such dialogue act types as input</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<span class="target" id="module-usersimulator.UserModel"></span><div class="section" id="usermodel-py-goal-agenda-inventor-for-sim-user">
+<h2>UserModel.py - goal, agenda inventor for sim user<a class="headerlink" href="#usermodel-py-goal-agenda-inventor-for-sim-user" title="Permalink to this headline">¶</a></h2>
+<p>Copyright CUED Dialogue Systems Group 2015, 2016</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>CUED Imports/Dependencies: </p>
+<p class="last">import <tt class="xref py py-class docutils literal"><span class="pre">DiaAct</span></tt> <br />
+import <tt class="xref py py-class docutils literal"><span class="pre">dact</span></tt> <br />
+import <tt class="xref py py-class docutils literal"><span class="pre">UMHdcSim</span></tt> <br />
+import <a class="reference internal" href="Ontology.html#module-ontology.Ontology" title="ontology.Ontology"><tt class="xref py py-class docutils literal"><span class="pre">ontology.Ontology</span></tt></a> <br />
+import <a class="reference internal" href="Utilities.html#module-utils.Settings" title="utils.Settings"><tt class="xref py py-class docutils literal"><span class="pre">utils.Settings</span></tt></a> <br />
+import <a class="reference internal" href="Utilities.html#module-utils.ContextLogger" title="utils.ContextLogger"><tt class="xref py py-class docutils literal"><span class="pre">utils.ContextLogger</span></tt></a></p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">documentation not complete</p>
+</div>
+<hr class="docutils" />
+<dl class="class">
+<dt id="usersimulator.UserModel.GoalGenerator">
+<em class="property">class </em><tt class="descclassname">usersimulator.UserModel.</tt><tt class="descname">GoalGenerator</tt><big>(</big><em>dstring</em>, <em>conditional_behaviour=False</em><big>)</big><a class="headerlink" href="#usersimulator.UserModel.GoalGenerator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates domain specific goals for simulated user.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dstring</strong> (<em>str</em>) &#8211; domain tag</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="usersimulator.UserModel.GoalGenerator.init_goal">
+<tt class="descname">init_goal</tt><big>(</big><em>otherDomainsConstraints</em><big>)</big><a class="headerlink" href="#usersimulator.UserModel.GoalGenerator.init_goal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialises the goal g with random constraints and requests</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>otherDomainsConstraints</strong> (<em>list</em>) &#8211; of constraints from other domains in this dialog which have already had goals generated.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">(instance) of <a class="reference internal" href="#usersimulator.UserModel.UMGoal" title="usersimulator.UserModel.UMGoal"><tt class="xref py py-class docutils literal"><span class="pre">UMGoal</span></tt></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="usersimulator.UserModel.UM">
+<em class="property">class </em><tt class="descclassname">usersimulator.UserModel.</tt><tt class="descname">UM</tt><big>(</big><em>domainString</em><big>)</big><a class="headerlink" href="#usersimulator.UserModel.UM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulated user</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>None</strong> &#8211; </td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="usersimulator.UserModel.UM.init">
+<tt class="descname">init</tt><big>(</big><em>otherDomainsConstraints</em><big>)</big><a class="headerlink" href="#usersimulator.UserModel.UM.init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialises the simulated user.
+1. Initialises the goal G using the goal generator.
+2. Populates the agenda A using the goal G.
+Resets all UM status to their defaults.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>otherDomainsConstraints</strong> (<em>list</em>) &#8211; of domain goals/constraints (slot=val) from other domains in dialog for which goal has already been generated.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns None:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="usersimulator.UserModel.UM.receive">
+<tt class="descname">receive</tt><big>(</big><em>sys_act</em><big>)</big><a class="headerlink" href="#usersimulator.UserModel.UM.receive" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called to transmit the machine dialogue act to the user.
+It updates the goal and the agenda.
+:param sys_act: System action.
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="usersimulator.UserModel.UM.respond">
+<tt class="descname">respond</tt><big>(</big><big>)</big><a class="headerlink" href="#usersimulator.UserModel.UM.respond" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called after receive() to get the user dialogue act response.
+The method first increments the turn counter, then pops n items off the agenda to form
+the response dialogue act. The agenda and goal are updated accordingly.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>None</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">(instance) of <tt class="xref py py-class docutils literal"><span class="pre">DiaAct</span></tt></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="usersimulator.UserModel.UMAgenda">
+<em class="property">class </em><tt class="descclassname">usersimulator.UserModel.</tt><tt class="descname">UMAgenda</tt><big>(</big><em>dstring</em><big>)</big><a class="headerlink" href="#usersimulator.UserModel.UMAgenda" title="Permalink to this definition">¶</a></dt>
+<dd><p>Agenda of <tt class="xref py py-class docutils literal"><span class="pre">DiaAct</span></tt> acts corresponding to a goal.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>domain</strong> (<em>str</em>) &#8211; domain tag (ie CamRestaurants)</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="usersimulator.UserModel.UMAgenda.append_dact_to_front">
+<tt class="descname">append_dact_to_front</tt><big>(</big><em>dact</em><big>)</big><a class="headerlink" href="#usersimulator.UserModel.UMAgenda.append_dact_to_front" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds the given dialogue act to the front of the agenda</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>(instance)</strong> &#8211; dact</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="usersimulator.UserModel.UMAgenda.clear">
+<tt class="descname">clear</tt><big>(</big><big>)</big><a class="headerlink" href="#usersimulator.UserModel.UMAgenda.clear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Erases all acts on the agenda (empties list)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="usersimulator.UserModel.UMAgenda.contains">
+<tt class="descname">contains</tt><big>(</big><em>slot</em>, <em>value</em>, <em>negate=False</em><big>)</big><a class="headerlink" href="#usersimulator.UserModel.UMAgenda.contains" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if slot, value pair is in an agenda dialogue act</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>slot</strong> &#8211; </li>
+<li><strong>value</strong> &#8211; </li>
+<li><strong>negate</strong> (<em>bool</em>) &#8211; None</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">(bool) slot, value is in an agenda dact?</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="usersimulator.UserModel.UMAgenda.filter_acts_slot">
+<tt class="descname">filter_acts_slot</tt><big>(</big><em>slot</em><big>)</big><a class="headerlink" href="#usersimulator.UserModel.UMAgenda.filter_acts_slot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Any acts related to the given slot are removed from the agenda.
+:param slot: slot name
+:type slot: str
+:return: None</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="usersimulator.UserModel.UMAgenda.filter_constraints">
+<tt class="descname">filter_constraints</tt><big>(</big><em>dap</em><big>)</big><a class="headerlink" href="#usersimulator.UserModel.UMAgenda.filter_constraints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filters out acts on the agenda that convey the constraints mentioned in the given dialogue act. 
+Calls <a class="reference internal" href="#usersimulator.UserModel.UMAgenda.filter_acts_slot" title="usersimulator.UserModel.UMAgenda.filter_acts_slot"><tt class="xref py py-meth docutils literal"><span class="pre">filter_acts_slot()</span></tt></a> to do so.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dap</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="usersimulator.UserModel.UMAgenda.get_agenda_with_act">
+<tt class="descname">get_agenda_with_act</tt><big>(</big><em>act</em><big>)</big><a class="headerlink" href="#usersimulator.UserModel.UMAgenda.get_agenda_with_act" title="Permalink to this definition">¶</a></dt>
+<dd><p>agenda items with this act
+:param act: dialogue act 
+:type act: str
+:return: (list) agenda items</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="usersimulator.UserModel.UMAgenda.get_agenda_with_act_slot">
+<tt class="descname">get_agenda_with_act_slot</tt><big>(</big><em>act</em>, <em>slot</em><big>)</big><a class="headerlink" href="#usersimulator.UserModel.UMAgenda.get_agenda_with_act_slot" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>act</strong> (<em>str</em>) &#8211; dialogue act</li>
+<li><strong>slot</strong> (<em>str</em>) &#8211; slot name</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">(list) of agenda items</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="usersimulator.UserModel.UMAgenda.init">
+<tt class="descname">init</tt><big>(</big><em>goal</em><big>)</big><a class="headerlink" href="#usersimulator.UserModel.UMAgenda.init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialises the agenda by creating DiaActs corresponding to the
+constraints in the goal G. Uses the default order for the
+dialogue acts on the agenda: an inform act is created for
+each constraint. Finally a bye act is added at the bottom of the agenda.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>goal</strong> &#8211; </td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">No requests are added to the agenda.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="usersimulator.UserModel.UMAgenda.replace_acts_slot">
+<tt class="descname">replace_acts_slot</tt><big>(</big><em>slot</em>, <em>replaceact='confirm'</em><big>)</big><a class="headerlink" href="#usersimulator.UserModel.UMAgenda.replace_acts_slot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="usersimulator.UserModel.UMAgenda.size">
+<tt class="descname">size</tt><big>(</big><big>)</big><a class="headerlink" href="#usersimulator.UserModel.UMAgenda.size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Utility func to get size of agenda_items list</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">(int) length</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="usersimulator.UserModel.UMGoal">
+<em class="property">class </em><tt class="descclassname">usersimulator.UserModel.</tt><tt class="descname">UMGoal</tt><big>(</big><em>patience</em>, <em>domainString</em><big>)</big><a class="headerlink" href="#usersimulator.UserModel.UMGoal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines a goal within a domain</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>patience</strong> (<em>int</em>) &#8211; user patience</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="usersimulator.UserModel.UMGoal.add_const">
+<tt class="descname">add_const</tt><big>(</big><em>slot</em>, <em>value</em>, <em>negate=False</em><big>)</big><a class="headerlink" href="#usersimulator.UserModel.UMGoal.add_const" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="usersimulator.UserModel.UMGoal.add_prev_used">
+<tt class="descname">add_prev_used</tt><big>(</big><em>slot</em>, <em>value</em><big>)</big><a class="headerlink" href="#usersimulator.UserModel.UMGoal.add_prev_used" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds the given slot-value pair to the record of previously used slot-value pairs.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="usersimulator.UserModel.UMGoal.are_all_requests_filled">
+<tt class="descname">are_all_requests_filled</tt><big>(</big><big>)</big><a class="headerlink" href="#usersimulator.UserModel.UMGoal.are_all_requests_filled" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if all request slots have a non-empty value.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="usersimulator.UserModel.UMGoal.get_correct_const_value">
+<tt class="descname">get_correct_const_value</tt><big>(</big><em>slot</em>, <em>negate=False</em><big>)</big><a class="headerlink" href="#usersimulator.UserModel.UMGoal.get_correct_const_value" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">(list of) value of the given slot in user goal constraint.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="usersimulator.UserModel.UMGoal.get_correct_const_value_list">
+<tt class="descname">get_correct_const_value_list</tt><big>(</big><em>slot</em>, <em>negate=False</em><big>)</big><a class="headerlink" href="#usersimulator.UserModel.UMGoal.get_correct_const_value_list" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">(list of) value of the given slot in user goal constraint.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="usersimulator.UserModel.UMGoal.is_satisfy_all_consts">
+<tt class="descname">is_satisfy_all_consts</tt><big>(</big><em>item</em><big>)</big><a class="headerlink" href="#usersimulator.UserModel.UMGoal.is_satisfy_all_consts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if all the given items set[(slot, op, value),..] satisfies all goal constraints (conjunction of constraints).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="usersimulator.UserModel.UMGoal.is_venue_recommended">
+<tt class="descname">is_venue_recommended</tt><big>(</big><big>)</big><a class="headerlink" href="#usersimulator.UserModel.UMGoal.is_venue_recommended" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True if the request slot &#8216;name&#8217; is not empty.
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="usersimulator.UserModel.UMGoal.set_copied_constraints">
+<tt class="descname">set_copied_constraints</tt><big>(</big><em>all_conditional_constraints</em><big>)</big><a class="headerlink" href="#usersimulator.UserModel.UMGoal.set_copied_constraints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a list of dacts, where the constraints have come from earlier domains in the dialog.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>all_conditional_constraints</strong> (<em>dict</em>) &#8211; of all previous constraints (over all domains in dialog)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<span class="target" id="module-usersimulator.UMHdcSim"></span><div class="section" id="umhdcsim-py-handcrafted-simulated-user-behaviour">
+<h2>UMHdcSim.py - Handcrafted simulated user behaviour<a class="headerlink" href="#umhdcsim-py-handcrafted-simulated-user-behaviour" title="Permalink to this headline">¶</a></h2>
+<p>Copyright CUED Dialogue Systems Group 2015, 2016</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>CUED Imports/Dependencies: </p>
+<p class="last">import <tt class="xref py py-class docutils literal"><span class="pre">DiaAct</span></tt> <br />
+import <tt class="xref py py-class docutils literal"><span class="pre">dact</span></tt> <br />
+import <tt class="xref py py-class docutils literal"><span class="pre">UserModel</span></tt> <br />
+import <a class="reference internal" href="Utilities.html#module-utils.Settings" title="utils.Settings"><tt class="xref py py-class docutils literal"><span class="pre">utils.Settings</span></tt></a> <br />
+import <a class="reference internal" href="Utilities.html#module-utils.ContextLogger" title="utils.ContextLogger"><tt class="xref py py-class docutils literal"><span class="pre">utils.ContextLogger</span></tt></a></p>
+</div>
+<p><strong>Relevant config variables</strong> (values are defaults):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="n">um</span><span class="p">]</span>
+<span class="n">usenewgoalscenarios</span> <span class="o">=</span> <span class="bp">True</span> 
+<span class="n">answerreqalways</span> <span class="o">=</span> <span class="bp">False</span>
+
+<span class="p">[</span><span class="n">goalgenerator</span><span class="p">]</span>
+<span class="n">patience</span> <span class="o">=</span> <span class="mi">10</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">documentation not complete</p>
+</div>
+<dl class="class">
+<dt id="usersimulator.UMHdcSim.UMHdcSim">
+<em class="property">class </em><tt class="descclassname">usersimulator.UMHdcSim.</tt><tt class="descname">UMHdcSim</tt><big>(</big><em>domainString</em><big>)</big><a class="headerlink" href="#usersimulator.UMHdcSim.UMHdcSim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handcrafted behaviour of simulated user</p>
+<dl class="method">
+<dt id="usersimulator.UMHdcSim.UMHdcSim.init">
+<tt class="descname">init</tt><big>(</big><em>goal</em><big>)</big><a class="headerlink" href="#usersimulator.UMHdcSim.UMHdcSim.init" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="usersimulator.UMHdcSim.UMHdcSim.receive">
+<tt class="descname">receive</tt><big>(</big><em>sys_act</em>, <em>goal</em><big>)</big><a class="headerlink" href="#usersimulator.UMHdcSim.UMHdcSim.receive" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="usersimulator.UMHdcSim.UMHdcSim.respond">
+<tt class="descname">respond</tt><big>(</big><em>goal</em><big>)</big><a class="headerlink" href="#usersimulator.UMHdcSim.UMHdcSim.respond" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called to get the user response.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>goal</strong> (<em>instance</em>) &#8211; of <tt class="xref py py-class docutils literal"><span class="pre">UMGoal</span></tt></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">(instance) of <tt class="xref py py-class docutils literal"><span class="pre">DiaActWithProb</span></tt></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="../_static/../../../Docs/cued_logo.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyDial</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Adding.html">How to add content to these pages</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="GeneralNotes.html">General System  Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Agent.html">Agent - the Complete Dialogue System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BeliefTracking.html">Belief Tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Evaluation.html">Evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Ontology.html">Ontology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="NLGeneration.html">Natural Language Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policy.html">Policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SemanticParsing.html">Semantic Parsing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SemanticBeliefTracking.html">Semantic Belief Tracking</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Simulation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#simulatedusersmanager-py-combines-simulated-components-into-functional-simulator">SimulatedUsersManager.py -combines simulated components into functional simulator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#confidencescorer-py">ConfidenceScorer.py -</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#confusionmodel-py-handcrafted-semi-error-creator">ConfusionModel.py - handcrafted SemI error creator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#errormodel-py-error-simulation">ErrorModel.py - error simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#errorsimulator-py-error-simulation">ErrorSimulator.py - error simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#nbestgenerator-py">NBestGenerator.py -</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#usermodel-py-goal-agenda-inventor-for-sim-user">UserModel.py - goal, agenda inventor for sim user</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#umhdcsim-py-handcrafted-simulated-user-behaviour">UMHdcSim.py - Handcrafted simulated user behaviour</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Systems.html">Dialogue Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tests.html">Tests executed by nosetests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="TopicTracking.html">Topic Tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Utilities.html">Utility Modules</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Papers.html">Interesting / Relevant Papers</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="SemanticBeliefTracking.html" title="previous chapter">Semantic Belief Tracking</a></li>
+      <li>Next: <a href="Systems.html" title="next chapter">Dialogue Systems</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, Dongho Kim, David Vandyke, Lina Rojas, Milica Gasic, Stefan Ultes, Steve Young.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.1.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster </a>
+      
+      |
+      <a href="../_sources/Docs/Simulation.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,14 @@
+Belief Tracking
+***********************
+
+.. |.| raw:: html
+
+   <br />
+   
+.. automodule:: belieftracking.baseline
+   :members:
+
+.. automodule:: belieftracking.BeliefTracker
+   :members:
+
+

@@ -1,0 +1,22 @@
+Tests executed by nosetests
+***************************
+
+.. |.| raw:: html
+
+   <br />
+   
+.. include:: ../tests/README.rst   
+ 
+.. automodule:: tests.test_Agent
+   :members:
+     
+.. automodule:: tests.test_DialogueServer
+   :members:
+
+.. automodule:: tests.test_Simulate
+   :members:
+  
+.. automodule:: tests.test_Settings
+   :members:
+   
+

@@ -1,0 +1,299 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Semantic Parsing &mdash; PyDial 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="PyDial 1.0.0 documentation" href="../index.html" />
+    <link rel="next" title="Semantic Belief Tracking" href="SemanticBeliefTracking.html" />
+    <link rel="prev" title="Policy" href="Policy.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="semantic-parsing">
+<h1>Semantic Parsing<a class="headerlink" href="#semantic-parsing" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-semi.RegexSemI"></span><div class="section" id="regexsemi-py-regular-expressions-semi-parser-base-class">
+<h2>RegexSemI.py - Regular expressions SemI parser base class<a class="headerlink" href="#regexsemi-py-regular-expressions-semi-parser-base-class" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>assumptions:</dt>
+<dd><ul class="first last">
+<li><dl class="first docutils">
+<dt>obs can be a ASR n-best list - potential sentence inputs each with a probability</dt>
+<dd><p class="first last">Currently - no probabilities - will have to slightly amend code to deal with these.</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">will only output text semantic acts (plus probs maybe) &#8211; wont be instances of DiaAct for example</p>
+</li>
+<li><p class="first">go over act definitions - speak with Steve?. &#8211; part of this is affirm()? confirm()?</p>
+</li>
+<li><p class="first">&#8220;i dont want X&#8221; &#8211;&gt; inform(slot!=X)   do we do this?</p>
+</li>
+</ul>
+</dd>
+</dl>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Remember that this is the base class for all of the regex parsers. Making changes here could possibly fix a parser
+in your domain, but (at worst!) break/weaken parsers in all other domains! i.e. &#8211; 1st, 2nd and 3rd approaches
+should be to tweak the derived class for the domain of interest. You can redefine anything in the derived class.</p>
+</div>
+<dl class="class">
+<dt id="semi.RegexSemI.FileParser">
+<em class="property">class </em><tt class="descclassname">semi.RegexSemI.</tt><tt class="descname">FileParser</tt><big>(</big><em>filename</em>, <em>domainTag='CamRestaurants'</em><big>)</big><a class="headerlink" href="#semi.RegexSemI.FileParser" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="semi.RegexSemI.FileParser.decode_file">
+<tt class="descname">decode_file</tt><big>(</big><em>DOPRINT=True</em><big>)</big><a class="headerlink" href="#semi.RegexSemI.FileParser.decode_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="semi.RegexSemI.FileParser.test_file">
+<tt class="descname">test_file</tt><big>(</big><em>referenceFile=None</em><big>)</big><a class="headerlink" href="#semi.RegexSemI.FileParser.test_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Note this just has some <strong>very basic checking</strong> that the ref and parsed file match up appropriately.</p>
+<p>A guide to using this function for developing Regex SemI parsers:
+0. create a list of example sentences for parsing
+1. get a parser working a little
+2. Dump the output of parsing the example sentences file 
+&gt;&gt; python RegexSemI.py _resources/EXAMPLE_INPUT_SENTENCES_FOR_DOMAIN DOMAINTAG PATH_TO_REPO_ROOT &gt; OUTfile
+3. Fix the semantic parsers in the OUTfile so that it can be used as a reference 
+4. Improve the parser
+5. Check the improvements against the reference OUTfile
+&gt;&gt; python RegexSemI.py _resources/EXAMPLE_INPUT_SENTENCES_FOR_DOMAIN DOMAINTAG PATH_TO_REPO_ROOT OUTfile
+6. go back to 4, add more sentences to examples file etc etc</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="semi.RegexSemI.RegexSemI">
+<em class="property">class </em><tt class="descclassname">semi.RegexSemI.</tt><tt class="descname">RegexSemI</tt><a class="headerlink" href="#semi.RegexSemI.RegexSemI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is a  base class for each domains Regular Expressions based semantic parser. Primary focus is on <strong>users intent</strong>.
+The derived semantic parsers of each domain can deal with the constraints (slots,values).</p>
+<dl class="method">
+<dt id="semi.RegexSemI.RegexSemI.clean">
+<tt class="descname">clean</tt><big>(</big><big>)</big><a class="headerlink" href="#semi.RegexSemI.RegexSemI.clean" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="semi.RegexSemI.RegexSemI.combine_parses">
+<tt class="descname">combine_parses</tt><big>(</big><em>nbest_parses</em><big>)</big><a class="headerlink" href="#semi.RegexSemI.RegexSemI.combine_parses" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO - should return a list of tuples (semantic act, prob) - in order</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="semi.RegexSemI.RegexSemI.decode">
+<tt class="descname">decode</tt><big>(</big><em>obs</em>, <em>sys_act=None</em>, <em>turn=None</em><big>)</big><a class="headerlink" href="#semi.RegexSemI.RegexSemI.decode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assumes input is either a single string or a list of tuples (string, prob) as in a nbest list.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="semi.RegexSemI.RegexSemI.decode_single_hypothesis">
+<tt class="descname">decode_single_hypothesis</tt><big>(</big><em>obs</em><big>)</big><a class="headerlink" href="#semi.RegexSemI.RegexSemI.decode_single_hypothesis" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Param :</th><td class="field-body">(str) obs - sentence (an ASR hypothesis)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="semi.RegexSemI.RegexSemI.init_regular_expressions">
+<tt class="descname">init_regular_expressions</tt><big>(</big><big>)</big><a class="headerlink" href="#semi.RegexSemI.RegexSemI.init_regular_expressions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<span class="target" id="module-semi.SemI"></span><div class="section" id="semi-py-semantic-input-parser">
+<h2>SemI.py - Semantic input parser<a class="headerlink" href="#semi-py-semantic-input-parser" title="Permalink to this headline">¶</a></h2>
+<p>Copyright CUED Dialogue Systems Group 2015, 2016</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>CUED Imports/Dependencies:</p>
+<p class="last">import <a class="reference internal" href="Ontology.html#module-ontology.OntologyUtils" title="ontology.OntologyUtils"><tt class="xref py py-mod docutils literal"><span class="pre">ontology.OntologyUtils</span></tt></a> <br />
+import <a class="reference internal" href="Utilities.html#module-utils.Settings" title="utils.Settings"><tt class="xref py py-mod docutils literal"><span class="pre">utils.Settings</span></tt></a> <br />
+import <a class="reference internal" href="Utilities.html#module-utils.ContextLogger" title="utils.ContextLogger"><tt class="xref py py-mod docutils literal"><span class="pre">utils.ContextLogger</span></tt></a></p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">No semantic parser is implemented. 
+Pass through semantic input parsing is the only thing implemented here.</p>
+</div>
+<hr class="docutils" />
+<dl class="class">
+<dt id="semi.SemI.SemI">
+<em class="property">class </em><tt class="descclassname">semi.SemI.</tt><tt class="descname">SemI</tt><a class="headerlink" href="#semi.SemI.SemI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interface class SemI, it defines the method decode that all the SemI classes must implement</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="semi.SemI.SemIManager">
+<em class="property">class </em><tt class="descclassname">semi.SemI.</tt><tt class="descname">SemIManager</tt><a class="headerlink" href="#semi.SemI.SemIManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Semantic Input Manager contains a dictionary with all the SemI objects currently running, the key of the dictionary is the
+domain tag</p>
+<dl class="method">
+<dt id="semi.SemI.SemIManager.clean_possible_texthub_switch">
+<tt class="descname">clean_possible_texthub_switch</tt><big>(</big><em>userActText</em><big>)</big><a class="headerlink" href="#semi.SemI.SemIManager.clean_possible_texthub_switch" title="Permalink to this definition">¶</a></dt>
+<dd><p>NB: only for texthub.py
+This removes switch(&#8220;Domain&#8221;) - as you may enter in texthub if using the switch topic tracker
+You can add domain information after e.g.: switch(&#8220;CamRestaurants&#8221;)i want a cheap restaurant
+:param userActText: list of user act hypothesis?
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="semi.SemI.SemIManager.decode">
+<tt class="descname">decode</tt><big>(</big><em>ASR_obs</em>, <em>sys_act</em>, <em>domainTag</em>, <em>turn=None</em><big>)</big><a class="headerlink" href="#semi.SemI.SemIManager.decode" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ASR_obs</strong> &#8211; ASR hypotheses</li>
+<li><strong>sys_act</strong> &#8211; is the system action prior to collecting users response in obs.</li>
+<li><strong>domainTag</strong> &#8211; is the domain we want to parse the obs in</li>
+<li><strong>turn</strong> &#8211; the turn id, this parameter is optional</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="../_static/../../../Docs/cued_logo.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyDial</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Adding.html">How to add content to these pages</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="GeneralNotes.html">General System  Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Agent.html">Agent - the Complete Dialogue System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BeliefTracking.html">Belief Tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Evaluation.html">Evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Ontology.html">Ontology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="NLGeneration.html">Natural Language Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policy.html">Policy</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Semantic Parsing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#regexsemi-py-regular-expressions-semi-parser-base-class">RegexSemI.py - Regular expressions SemI parser base class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#semi-py-semantic-input-parser">SemI.py - Semantic input parser</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="SemanticBeliefTracking.html">Semantic Belief Tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Simulation.html">Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Systems.html">Dialogue Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tests.html">Tests executed by nosetests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="TopicTracking.html">Topic Tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Utilities.html">Utility Modules</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Papers.html">Interesting / Relevant Papers</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="Policy.html" title="previous chapter">Policy</a></li>
+      <li>Next: <a href="SemanticBeliefTracking.html" title="next chapter">Semantic Belief Tracking</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, Dongho Kim, David Vandyke, Lina Rojas, Milica Gasic, Stefan Ultes, Steve Young.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.1.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster </a>
+      
+      |
+      <a href="../_sources/Docs/SemanticParsing.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

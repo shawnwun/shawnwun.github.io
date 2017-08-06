@@ -1,0 +1,508 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Dialogue Systems &mdash; PyDial 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="PyDial 1.0.0 documentation" href="../index.html" />
+    <link rel="next" title="Tests executed by nosetests" href="Tests.html" />
+    <link rel="prev" title="Simulation" href="Simulation.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="dialogue-systems">
+<h1>Dialogue Systems<a class="headerlink" href="#dialogue-systems" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-DialogueServer"></span><div class="section" id="dialogueserver-py-audio-and-voip-interface-to-spoken-sds">
+<h2>DialogueServer.py - Audio and VoIP interface to Spoken SDS<a class="headerlink" href="#dialogueserver-py-audio-and-voip-interface-to-spoken-sds" title="Permalink to this headline">¶</a></h2>
+<p>Copyright CUED Dialogue Systems Group 2015, 2016</p>
+<p>This class implements an HTTP server, it receives HTTP Request and generates HTTP Replies.
+The format of the messages is JSON. The server has an agent (i.e., a dialogue system or the set of dialogue system components),
+that can be copied, and can take multiple calls in this way
+it can correctly handle concurren request already supported by the BaseHTTPServer</p>
+<dl class="docutils">
+<dt><strong>Basic Execution</strong>: </dt>
+<dd><div class="first last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">python</span> <span class="n">DialogueServer</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">C</span> <span class="n">CONFIG</span> <span class="p">[</span><span class="o">-</span><span class="n">s</span> <span class="o">--</span><span class="n">nocolor</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<p><strong>Relevant Config variables</strong> [Default values]:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="n">dialogueserver</span><span class="p">]</span>
+<span class="n">dialhost</span> <span class="o">=</span> <span class="n">nui</span><span class="o">.</span><span class="n">eng</span><span class="o">.</span><span class="n">cam</span><span class="o">.</span><span class="n">ac</span><span class="o">.</span><span class="n">uk</span> 
+<span class="n">dialport</span> <span class="o">=</span> <span class="mi">8082</span>
+</pre></div>
+</div>
+<p><em>Please change these configuration variables according to your machine settings.</em>
+<em>Note that these variables must agree with the configuration of your HTTP client</em>
+<em>If you want to run it locally use: localhost</em></p>
+<div class="section" id="protocol-description">
+<h3>Protocol description<a class="headerlink" href="#protocol-description" title="Permalink to this headline">¶</a></h3>
+<p><strong>Requests to the server</strong></p>
+<p>New call: notify the DialogueManager when a new call (or new session) has started:</p>
+<div class="highlight-python"><pre>newcall?sessionpar={"session": "SESSION_NAME"}</pre>
+</div>
+<p>Next: ask the DialogueManager what to do next and provide the JSON RESULT from the ASR or the DTMF RESULT:</p>
+<div class="highlight-python"><pre>next?{ "session": "SESSION_NAME", "result" : "JSON_ASR_RESULT"}
+next?{ "session": "SESSION_NAME", "result" :{"dtmf" :  "DTMF_RESULT" }"</pre>
+</div>
+<p>Clean: clean session in the case of unexpected errors in the ASR CLIENT or forced hung-up in the VOICE CLIENT:</p>
+<div class="highlight-python"><pre>clean?{"session": "SESSION_NAME"}</pre>
+</div>
+<p><strong>Responses from the server</strong></p>
+<p>Question:</p>
+<div class="highlight-python"><pre>http reply {"bargein": "true", "replyType": "question", "text": "Hello, welcome to the Cambridge Multi- Domain dialogue system. How may I help you?"}</pre>
+</div>
+<p>Prompt:</p>
+<div class="highlight-python"><pre>http reply {"bargein": "false", "replyType": "prompt", "text": "Thank you, Goodbye", "final":"true"}</pre>
+</div>
+<p>Flags for the messages are:</p>
+<div class="highlight-python"><pre>"replyType" = "prompt"|"question"
+"bargein"   = "true"|"false", is barge in supported in the ASR?
+"final"     = "true"|"false", if this flag is true the Voice Client must hung up the call.
+"dtmf"      = "true"|"false", is expecting dtmf result?
+"dtmfsize"  =  dtmfsize (i.e., number of digits)
+"text"      =  TEXT_TO_PROMPT</pre>
+</div>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>CorneliaServer:
+<a class="reference external" href="https://bitbucket.org/lmr46/voiceserver.git">https://bitbucket.org/lmr46/voiceserver.git</a>
+VoiceBroker (The Class Server):
+<a class="reference external" href="https://bitbucket.org/dialoguesystems/voicebroker.git">https://bitbucket.org/dialoguesystems/voicebroker.git</a></p>
+<p class="last">import :<cite>json</cite> <br />
+import :BaseHTTPServer <br />
+import :json <br />
+import :Settings <br />
+import :ContexLogger <br /></p>
+</div>
+<hr class="docutils" />
+<dl class="class">
+<dt id="DialogueServer.DialogueServer">
+<em class="property">class </em><tt class="descclassname">DialogueServer.</tt><tt class="descname">DialogueServer</tt><a class="headerlink" href="#DialogueServer.DialogueServer" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class implements an HTTP Server</p>
+<dl class="method">
+<dt id="DialogueServer.DialogueServer.ask_for_subjective">
+<tt class="descname">ask_for_subjective</tt><big>(</big><em>agent_id</em>, <em>currentPrompt</em><big>)</big><a class="headerlink" href="#DialogueServer.DialogueServer.ask_for_subjective" title="Permalink to this definition">¶</a></dt>
+<dd><p>nb - statefull</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="DialogueServer.DialogueServer.ask_for_task_id">
+<tt class="descname">ask_for_task_id</tt><big>(</big><em>agent_id</em>, <em>currentPrompt</em><big>)</big><a class="headerlink" href="#DialogueServer.DialogueServer.ask_for_task_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>nb - statefull</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="DialogueServer.DialogueServer.cleaningCNet">
+<tt class="descname">cleaningCNet</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#DialogueServer.DialogueServer.cleaningCNet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prunes the Confusion Network</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Not perfect:  improve it according to c++ pruning for now it is removing the paths where the !NULL is                     the most probable ...to be checked <strong>See HRec.cpp Method: TranscriptionFromConf Line 4075</strong>  (lmr46)</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> &#8211; json data</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="DialogueServer.DialogueServer.cleaning_response">
+<tt class="descname">cleaning_response</tt><big>(</big><em>msg=''</em>, <em>session_id=None</em>, <em>isbargein=None</em><big>)</big><a class="headerlink" href="#DialogueServer.DialogueServer.cleaning_response" title="Permalink to this definition">¶</a></dt>
+<dd><p>Note that msg still states: DIALOGUE_SERVER_ERROR - since session should only need to be cleaned if user hung up etc - in
+normal flow the session will be cleaned once the dialogue has ended.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="DialogueServer.DialogueServer.control">
+<tt class="descname">control</tt><big>(</big><em>return_control</em>, <em>session_id</em>, <em>kept_alive</em><big>)</big><a class="headerlink" href="#DialogueServer.DialogueServer.control" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a control message, for the moment the arguments are</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>return_control</strong> &#8211; boolean indicating whether to return control or not</li>
+<li><strong>session_id</strong> &#8211; the session id</li>
+<li><strong>kept_alive</strong> &#8211; boolean indicating whether session is kept alive or not</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="DialogueServer.DialogueServer.generate_token">
+<tt class="descname">generate_token</tt><big>(</big><big>)</big><a class="headerlink" href="#DialogueServer.DialogueServer.generate_token" title="Permalink to this definition">¶</a></dt>
+<dd><p>Produces the 4 digit token for verification of the call on camdial.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="DialogueServer.DialogueServer.getNBest">
+<tt class="descname">getNBest</tt><big>(</big><em>nbest</em>, <em>key</em>, <em>words</em>, <em>like</em>, <em>retPaths</em><big>)</big><a class="headerlink" href="#DialogueServer.DialogueServer.getNBest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the N-Best list from CNet candidates</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="DialogueServer.DialogueServer.get_subjective_DTMF">
+<tt class="descname">get_subjective_DTMF</tt><big>(</big><em>agent_id</em>, <em>data</em><big>)</big><a class="headerlink" href="#DialogueServer.DialogueServer.get_subjective_DTMF" title="Permalink to this definition">¶</a></dt>
+<dd><p>nb - statefull</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="DialogueServer.DialogueServer.get_task_by_id">
+<tt class="descname">get_task_by_id</tt><big>(</big><em>task_id</em><big>)</big><a class="headerlink" href="#DialogueServer.DialogueServer.get_task_by_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets a task by task_id. returns None if no such task_id exists</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="DialogueServer.DialogueServer.get_task_id_DTMF">
+<tt class="descname">get_task_id_DTMF</tt><big>(</big><em>agent_id</em>, <em>data</em><big>)</big><a class="headerlink" href="#DialogueServer.DialogueServer.get_task_id_DTMF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Note the taskID * 3 = task Number (and it is the task number that is displayed on the landing page, and that will 
+thus be entered here). Note - is statefull  (ie increases TASK_RETRIEVAL_ATTEMPTS)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="DialogueServer.DialogueServer.parse_additional_information">
+<tt class="descname">parse_additional_information</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#DialogueServer.DialogueServer.parse_additional_information" title="Permalink to this definition">¶</a></dt>
+<dd><p>The ASR client communicating with DialogueServer may also send some additional information. This is included under the
+&#8220;context&#8221; key of the JSON object it posts, and can be extended to included any extra information. For now it just contains
+the domain control should start with, since with DialPort for example they do their own topic tracking and hand control off
+to our system with the desire to access just a sub domain (eg SFRestaurants) and not start with our topicmanager.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>the format for this additional information, within the original JSON object being recieved is:</p>
+<div class="last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="s">&quot;context&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s">&quot;init_domain&quot;</span><span class="p">:</span> <span class="p">[{</span> <span class="s">&quot;value&quot;</span><span class="p">:</span> <span class="s">&quot;SFRestaurants&quot;</span><span class="p">,</span> <span class="s">&quot;confidence&quot;</span><span class="p">:</span> <span class="mf">0.6</span><span class="p">},</span> <span class="p">{</span> <span class="s">&quot;value&quot;</span><span class="p">:</span> <span class="s">&quot;SFHotels&quot;</span><span class="p">,</span> <span class="s">&quot;confidence&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">}],</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="s">&quot;entities&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;LOC&quot;</span><span class="p">,</span> <span class="s">&quot;value&quot;</span><span class="p">:</span> <span class="s">&quot;pittsburgh&quot;</span><span class="p">}]</span> <span class="p">}</span>                  
+</pre></div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="DialogueServer.DialogueServer.postToCamdial">
+<tt class="descname">postToCamdial</tt><big>(</big><em>token</em>, <em>dialogueID</em><big>)</big><a class="headerlink" href="#DialogueServer.DialogueServer.postToCamdial" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="DialogueServer.DialogueServer.prompt">
+<tt class="descname">prompt</tt><big>(</big><em>prompt</em>, <em>session_id</em>, <em>isbargein=None</em>, <em>isfinal=False</em>, <em>isdtmf=False</em>, <em>dtmfsize=1</em><big>)</big><a class="headerlink" href="#DialogueServer.DialogueServer.prompt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a prompt, for the moment the arguments are</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>prompt</strong> &#8211; the text to be prompt</li>
+<li><strong>isbargein</strong> &#8211; if barge in is allowed</li>
+<li><strong>isfinal</strong> &#8211; if it is the final sentence before the end of dialogue</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">reply in json</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="DialogueServer.DialogueServer.question">
+<tt class="descname">question</tt><big>(</big><em>question</em>, <em>session_id</em>, <em>isbargein=None</em><big>)</big><a class="headerlink" href="#DialogueServer.DialogueServer.question" title="Permalink to this definition">¶</a></dt>
+<dd><p>TTS prompt and expect a speech reply from user.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="DialogueServer.DialogueServer.recognition_failed_response">
+<tt class="descname">recognition_failed_response</tt><big>(</big><em>msg=''</em>, <em>session_id=None</em>, <em>isbargein=None</em><big>)</big><a class="headerlink" href="#DialogueServer.DialogueServer.recognition_failed_response" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles response to all errors that occur. Note msg is just a string - ie the errors are not formatted robustly as class
+objects or similar.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="DialogueServer.DialogueServer.run">
+<tt class="descname">run</tt><big>(</big><big>)</big><a class="headerlink" href="#DialogueServer.DialogueServer.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Listen to request in host dialhost and port dialport</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="DialogueServer.make_request_handler_class">
+<tt class="descclassname">DialogueServer.</tt><tt class="descname">make_request_handler_class</tt><big>(</big><em>dialServer</em><big>)</big><a class="headerlink" href="#DialogueServer.make_request_handler_class" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<span class="target" id="module-Simulate"></span><div class="section" id="simulate-py-semantic-level-user-simulator-system">
+<h2>Simulate.py - semantic level user simulator system.<a class="headerlink" href="#simulate-py-semantic-level-user-simulator-system" title="Permalink to this headline">¶</a></h2>
+<p>Copyright CUED Dialogue Systems Group 2015, 2016</p>
+<dl class="docutils">
+<dt><strong>Basic Execution</strong>: </dt>
+<dd><div class="first last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">python</span> <span class="n">Simulate</span><span class="o">.</span><span class="n">py</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="o">-</span><span class="n">C</span> <span class="n">CONFIG</span> <span class="p">[</span><span class="o">-</span><span class="n">n</span> <span class="o">-</span><span class="n">r</span> <span class="o">-</span><span class="n">l</span> <span class="o">-</span><span class="n">t</span> <span class="o">-</span><span class="n">g</span> <span class="o">-</span><span class="n">s</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<p>Optional arguments/flags [default values]:</p>
+<div class="highlight-python"><pre>-n Number of dialogs [1]
+-r semantic error rate [0]
+-s set random seed 
+-g generate text prompts
+-h help</pre>
+</div>
+<p><strong>Relevant Config variables</strong> [Default values]:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="n">simulate</span><span class="p">]</span>
+<span class="n">maxturns</span> <span class="o">=</span> <span class="mi">30</span> 
+<span class="n">continuewhensuccessful</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="n">forcenullpositive</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="n">confscorer</span> <span class="o">=</span> <span class="n">additive</span>
+</pre></div>
+</div>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>CUED Imports/Dependencies: </p>
+<p class="last">import <a class="reference internal" href="Utilities.html#module-utils.ContextLogger" title="utils.ContextLogger"><tt class="xref py py-class docutils literal"><span class="pre">utils.ContextLogger</span></tt></a> <br />
+import <a class="reference internal" href="Utilities.html#module-utils.Settings" title="utils.Settings"><tt class="xref py py-class docutils literal"><span class="pre">utils.Settings</span></tt></a> <br />
+import <tt class="xref py py-class docutils literal"><span class="pre">usersimulator.UserSimulator</span></tt> <br />
+import <tt class="xref py py-class docutils literal"><span class="pre">ontology.FlatOntology</span></tt> <br />
+import <a class="reference internal" href="Simulation.html#module-usersimulator.ErrorSimulator" title="usersimulator.ErrorSimulator"><tt class="xref py py-class docutils literal"><span class="pre">usersimulator.ErrorSimulator</span></tt></a></p>
+</div>
+<hr class="docutils" />
+<dl class="class">
+<dt id="Simulate.SimulationSystem">
+<em class="property">class </em><tt class="descclassname">Simulate.</tt><tt class="descname">SimulationSystem</tt><big>(</big><em>error_rate</em><big>)</big><a class="headerlink" href="#Simulate.SimulationSystem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Semantic level simulated dialog system</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>generate_prompts</strong> (<em>bool</em>) &#8211; semo output</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="Simulate.SimulationSystem.run">
+<tt class="descname">run</tt><big>(</big><em>session_id</em>, <em>agent_id='Smith'</em><big>)</big><a class="headerlink" href="#Simulate.SimulationSystem.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs one episode through the simulator</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>None</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns None:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Simulate.SimulationSystem.run_dialogs">
+<tt class="descname">run_dialogs</tt><big>(</big><em>numDialogs</em><big>)</big><a class="headerlink" href="#Simulate.SimulationSystem.run_dialogs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Just a loop over the run() method for the given number of dialogues.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<span class="target" id="module-Texthub"></span><div class="section" id="texthub-py-text-level-dialog-system">
+<h2>Texthub.py - text level dialog system.<a class="headerlink" href="#texthub-py-text-level-dialog-system" title="Permalink to this headline">¶</a></h2>
+<p>Copyright CUED Dialogue Systems Group 2015, 2016</p>
+<dl class="docutils">
+<dt><strong>Basic Execution</strong>:</dt>
+<dd><div class="first last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">python</span> <span class="n">texthub</span><span class="o">.</span><span class="n">py</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="o">-</span><span class="n">C</span> <span class="n">CONFIG</span> <span class="p">[</span><span class="o">-</span><span class="n">l</span> <span class="o">-</span><span class="n">r</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<p>Optional arguments/flags [default values]:</p>
+<div class="highlight-python"><pre>-r semantic error rate [0]
+-l set the system to use the given policy file
+-h help</pre>
+</div>
+<p><strong>Relevant config variables</strong>  (values are defaults):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="n">hub</span><span class="p">]</span>
+<span class="n">semi</span> <span class="o">=</span> <span class="n">PassthroughSemI</span>
+<span class="n">semo</span> <span class="o">=</span> <span class="n">PassthroughSemO</span>
+</pre></div>
+</div>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>CUED Imports/Dependencies: </p>
+<p class="last">import <a class="reference internal" href="Utilities.html#module-utils.ContextLogger" title="utils.ContextLogger"><tt class="xref py py-class docutils literal"><span class="pre">utils.ContextLogger</span></tt></a> <br />
+import <a class="reference internal" href="Utilities.html#module-utils.Settings" title="utils.Settings"><tt class="xref py py-class docutils literal"><span class="pre">utils.Settings</span></tt></a> <br />
+import <tt class="xref py py-class docutils literal"><span class="pre">SemI</span></tt> <br />
+import <tt class="xref py py-class docutils literal"><span class="pre">SemO</span></tt></p>
+</div>
+<hr class="docutils" />
+<dl class="class">
+<dt id="Texthub.ConsoleHub">
+<em class="property">class </em><tt class="descclassname">Texthub.</tt><tt class="descname">ConsoleHub</tt><a class="headerlink" href="#Texthub.ConsoleHub" title="Permalink to this definition">¶</a></dt>
+<dd><p>text based dialog system</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>None</strong> &#8211; </td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="Texthub.ConsoleHub.run">
+<tt class="descname">run</tt><big>(</big><big>)</big><a class="headerlink" href="#Texthub.ConsoleHub.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs one episode through Hub</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>None</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="../_static/../../../Docs/cued_logo.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyDial</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Adding.html">How to add content to these pages</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="GeneralNotes.html">General System  Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Agent.html">Agent - the Complete Dialogue System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BeliefTracking.html">Belief Tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Evaluation.html">Evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Ontology.html">Ontology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="NLGeneration.html">Natural Language Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policy.html">Policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SemanticParsing.html">Semantic Parsing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SemanticBeliefTracking.html">Semantic Belief Tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Simulation.html">Simulation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Dialogue Systems</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#dialogueserver-py-audio-and-voip-interface-to-spoken-sds">DialogueServer.py - Audio and VoIP interface to Spoken SDS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#simulate-py-semantic-level-user-simulator-system">Simulate.py - semantic level user simulator system.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#texthub-py-text-level-dialog-system">Texthub.py - text level dialog system.</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Tests.html">Tests executed by nosetests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="TopicTracking.html">Topic Tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Utilities.html">Utility Modules</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Papers.html">Interesting / Relevant Papers</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="Simulation.html" title="previous chapter">Simulation</a></li>
+      <li>Next: <a href="Tests.html" title="next chapter">Tests executed by nosetests</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, Dongho Kim, David Vandyke, Lina Rojas, Milica Gasic, Stefan Ultes, Steve Young.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.1.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster </a>
+      
+      |
+      <a href="../_sources/Docs/Systems.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

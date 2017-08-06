@@ -1,0 +1,1320 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Policy &mdash; PyDial 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="PyDial 1.0.0 documentation" href="../index.html" />
+    <link rel="next" title="Semantic Parsing" href="SemanticParsing.html" />
+    <link rel="prev" title="Natural Language Generation" href="NLGeneration.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="policy">
+<h1>Policy<a class="headerlink" href="#policy" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-policy.Policy"></span><div class="section" id="policy-py-abstract-class-for-all-policies">
+<h2>Policy.py - abstract class for all policies<a class="headerlink" href="#policy-py-abstract-class-for-all-policies" title="Permalink to this headline">¶</a></h2>
+<p>Copyright CUED Dialogue Systems Group 2015, 2016</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>CUED Imports/Dependencies: </p>
+<p class="last">import <a class="reference internal" href="Utilities.html#module-utils.Settings" title="utils.Settings"><tt class="xref py py-mod docutils literal"><span class="pre">utils.Settings</span></tt></a> <br />
+import <a class="reference internal" href="Utilities.html#module-utils.ContextLogger" title="utils.ContextLogger"><tt class="xref py py-mod docutils literal"><span class="pre">utils.ContextLogger</span></tt></a> <br />
+import <a class="reference internal" href="Ontology.html#module-ontology.OntologyUtils" title="ontology.OntologyUtils"><tt class="xref py py-mod docutils literal"><span class="pre">ontology.OntologyUtils</span></tt></a> <br />
+import <a class="reference internal" href="#module-policy.SummaryAction" title="policy.SummaryAction"><tt class="xref py py-mod docutils literal"><span class="pre">policy.SummaryAction</span></tt></a></p>
+</div>
+<hr class="docutils" />
+<dl class="class">
+<dt id="policy.Policy.Action">
+<em class="property">class </em><tt class="descclassname">policy.Policy.</tt><tt class="descname">Action</tt><big>(</big><em>action</em><big>)</big><a class="headerlink" href="#policy.Policy.Action" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dummy class representing one action. Used for recording and may be overridden by sub-class.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="policy.Policy.Episode">
+<em class="property">class </em><tt class="descclassname">policy.Policy.</tt><tt class="descname">Episode</tt><big>(</big><em>dstring=None</em><big>)</big><a class="headerlink" href="#policy.Policy.Episode" title="Permalink to this definition">¶</a></dt>
+<dd><p>An episode encapsulates the state-action-reward triplet which may be used for learning. Every entry represents one turn. 
+The last entry should contain <a class="reference internal" href="#policy.Policy.TerminalState" title="policy.Policy.TerminalState"><tt class="xref py py-class docutils literal"><span class="pre">TerminalState</span></tt></a> and <a class="reference internal" href="#policy.Policy.TerminalAction" title="policy.Policy.TerminalAction"><tt class="xref py py-class docutils literal"><span class="pre">TerminalAction</span></tt></a></p>
+<dl class="method">
+<dt id="policy.Policy.Episode.check">
+<tt class="descname">check</tt><big>(</big><big>)</big><a class="headerlink" href="#policy.Policy.Episode.check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks whether length of internal state action and reward lists are equal.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="policy.Policy.Episode.getWeightedReward">
+<tt class="descname">getWeightedReward</tt><big>(</big><big>)</big><a class="headerlink" href="#policy.Policy.Episode.getWeightedReward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the reward weighted by normalised accumulated weights. Used for multiagent learning in committee.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the reward weighted by normalised accumulated weights</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="policy.Policy.Episode.record">
+<tt class="descname">record</tt><big>(</big><em>state</em>, <em>action</em>, <em>reward</em>, <em>ma_weight=None</em><big>)</big><a class="headerlink" href="#policy.Policy.Episode.record" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stores the state action reward in internal lists.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>state</strong> (<a class="reference internal" href="#policy.Policy.State" title="policy.Policy.State"><tt class="xref py py-class docutils literal"><span class="pre">State</span></tt></a>) &#8211; the last belief state</li>
+<li><strong>action</strong> (<a class="reference internal" href="#policy.Policy.Action" title="policy.Policy.Action"><tt class="xref py py-class docutils literal"><span class="pre">Action</span></tt></a>) &#8211; the last system action</li>
+<li><strong>reward</strong> (<em>int</em>) &#8211; the reward of the last turn</li>
+<li><strong>ma_weight</strong> (<em>float</em>) &#8211; used by committee: the weight assigned by multiagent learning, optional</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="policy.Policy.Episode.tostring">
+<tt class="descname">tostring</tt><big>(</big><big>)</big><a class="headerlink" href="#policy.Policy.Episode.tostring" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints state, action, and reward lists to screen.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="policy.Policy.EpisodeStack">
+<em class="property">class </em><tt class="descclassname">policy.Policy.</tt><tt class="descname">EpisodeStack</tt><big>(</big><em>block_size=100</em><big>)</big><a class="headerlink" href="#policy.Policy.EpisodeStack" title="Permalink to this definition">¶</a></dt>
+<dd><p>A handler for episodes. Required if stack size is to become very large - may not want to hold all episodes in memory, but
+write out to file.</p>
+<dl class="method">
+<dt id="policy.Policy.EpisodeStack.add_episode">
+<tt class="descname">add_episode</tt><big>(</big><em>domain_episodes</em><big>)</big><a class="headerlink" href="#policy.Policy.EpisodeStack.add_episode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Items on stack are dictionaries of episodes for each domain (since with BCM can learn from 2 or more domains if a 
+multidomain dialogue happens)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="policy.Policy.EpisodeStack.retrieve_episode">
+<tt class="descname">retrieve_episode</tt><big>(</big><em>episode_key</em><big>)</big><a class="headerlink" href="#policy.Policy.EpisodeStack.retrieve_episode" title="Permalink to this definition">¶</a></dt>
+<dd><p>NB: this should probably be an iterator, using yield, rather than return</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="policy.Policy.Policy">
+<em class="property">class </em><tt class="descclassname">policy.Policy.</tt><tt class="descname">Policy</tt><big>(</big><em>domainString</em>, <em>learning=False</em>, <em>specialDomain=False</em><big>)</big><a class="headerlink" href="#policy.Policy.Policy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interface class for a single domain policy. Responsible for selecting the next system action and handling the learning of the policy.</p>
+<p>To create your own reward model, derive from this class.</p>
+<dl class="method">
+<dt id="policy.Policy.Policy.act_on">
+<tt class="descname">act_on</tt><big>(</big><em>beliefstate</em>, <em>hyps=None</em><big>)</big><a class="headerlink" href="#policy.Policy.Policy.act_on" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main policy method: mapping of belief state to system action.</p>
+<p>May initially return &#8216;hello()&#8217; as hardcoded action. Keeps track of last system action and last belief state.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>beliefstate</strong> (<em>dict</em>) &#8211; the belief state to act on</li>
+<li><strong>hyps</strong> (<em>list</em>) &#8211; n-best-list of semantic interpretations</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the next system action</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="policy.Policy.Policy.convertStateAction">
+<tt class="descname">convertStateAction</tt><big>(</big><em>state</em>, <em>action</em><big>)</big><a class="headerlink" href="#policy.Policy.Policy.convertStateAction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts the given state and action to policy-specific representations.</p>
+<p>By default, the generic classes <a class="reference internal" href="#policy.Policy.State" title="policy.Policy.State"><tt class="xref py py-class docutils literal"><span class="pre">State</span></tt></a> and <a class="reference internal" href="#policy.Policy.Action" title="policy.Policy.Action"><tt class="xref py py-class docutils literal"><span class="pre">Action</span></tt></a> are used. To change this, override method in sub-class.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>state</strong> (<em>anything</em>) &#8211; the state to be encapsulated</li>
+<li><strong>action</strong> &#8211; the action to be encapsulated</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Type :</th><td class="field-body"><p class="first last">action: anything</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="policy.Policy.Policy.finalizeRecord">
+<tt class="descname">finalizeRecord</tt><big>(</big><em>reward</em>, <em>domainInControl=None</em><big>)</big><a class="headerlink" href="#policy.Policy.Policy.finalizeRecord" title="Permalink to this definition">¶</a></dt>
+<dd><p>Records the final reward along with the terminal system action and terminal state. To change the type of state/action override <a class="reference internal" href="#policy.Policy.Policy.convertStateAction" title="policy.Policy.Policy.convertStateAction"><tt class="xref py py-func docutils literal"><span class="pre">convertStateAction()</span></tt></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>reward</strong> (<em>int</em>) &#8211; the final reward</li>
+<li><strong>domainInControl</strong> (<em>str</em>) &#8211; used by committee: the unique identifier domain string of the domain this dialogue originates in, optional</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="policy.Policy.Policy.nextAction">
+<tt class="descname">nextAction</tt><big>(</big><em>beliefstate</em>, <em>hyps</em><big>)</big><a class="headerlink" href="#policy.Policy.Policy.nextAction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interface method for selecting the next system action. Should be overridden by sub-class.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>beliefstate</strong> (<em>dict</em>) &#8211; the state the policy acts on</li>
+<li><strong>hyps</strong> (<em>list</em>) &#8211; n-best-list of semantic interpretations</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the next system action</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="policy.Policy.Policy.record">
+<tt class="descname">record</tt><big>(</big><em>reward</em>, <em>domainInControl=None</em>, <em>weight=None</em>, <em>state=None</em>, <em>action=None</em><big>)</big><a class="headerlink" href="#policy.Policy.Policy.record" title="Permalink to this definition">¶</a></dt>
+<dd><p>Records the current turn reward along with the last system action and belief state.</p>
+<p>To change the type of state/action override <a class="reference internal" href="#policy.Policy.Policy.convertStateAction" title="policy.Policy.Policy.convertStateAction"><tt class="xref py py-func docutils literal"><span class="pre">convertStateAction()</span></tt></a>. By default, the last master action is recorded. 
+If you want to have another action being recorded, eg., summary action, assign the respective object to self.actToBeRecorded in a derived class.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>reward</strong> (<em>int</em>) &#8211; the turn reward to be recorded</li>
+<li><strong>domainInControl</strong> (<em>str</em>) &#8211; the domain string unique identifier of the domain the reward originates in</li>
+<li><strong>weight</strong> (<em>float</em>) &#8211; used by committee: the weight of the reward in case of multiagent learning</li>
+<li><strong>state</strong> (<em>dict</em>) &#8211; used by committee: the belief state to be recorded</li>
+<li><strong>action</strong> (<em>str</em>) &#8211; used by committee: the action to be recorded</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="policy.Policy.Policy.restart">
+<tt class="descname">restart</tt><big>(</big><big>)</big><a class="headerlink" href="#policy.Policy.Policy.restart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Restarts the policy. Resets internal variables.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="policy.Policy.Policy.savePolicy">
+<tt class="descname">savePolicy</tt><big>(</big><em>FORCE_SAVE=False</em><big>)</big><a class="headerlink" href="#policy.Policy.Policy.savePolicy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves the learned policy model to file. Should be overridden by sub-class.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>FORCE_SAVE</strong> (<em>bool</em>) &#8211; used to force cleaning up of any learning and saving when we are powering off an agent.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="policy.Policy.Policy.train">
+<tt class="descname">train</tt><big>(</big><big>)</big><a class="headerlink" href="#policy.Policy.Policy.train" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interface method for initiating the training. Should be overridden by sub-class.</p>
+<p>This method is called at the end of each dialogue by <a class="reference internal" href="#policy.PolicyManager.PolicyManager" title="policy.PolicyManager.PolicyManager"><tt class="xref py py-class docutils literal"><span class="pre">PolicyManager</span></tt></a> if learning is enabled for the given domain policy.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="policy.Policy.State">
+<em class="property">class </em><tt class="descclassname">policy.Policy.</tt><tt class="descname">State</tt><big>(</big><em>state</em><big>)</big><a class="headerlink" href="#policy.Policy.State" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dummy class representing one state. Used for recording and may be overridden by sub-class.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="policy.Policy.TerminalAction">
+<em class="property">class </em><tt class="descclassname">policy.Policy.</tt><tt class="descname">TerminalAction</tt><a class="headerlink" href="#policy.Policy.TerminalAction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dummy class representing one terminal action. Used for recording and may be overridden by sub-class.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="policy.Policy.TerminalState">
+<em class="property">class </em><tt class="descclassname">policy.Policy.</tt><tt class="descname">TerminalState</tt><a class="headerlink" href="#policy.Policy.TerminalState" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dummy class representing one terminal state. Used for recording and may be overridden by sub-class.</p>
+</dd></dl>
+
+</div>
+<span class="target" id="module-policy.PolicyManager"></span><div class="section" id="policymanager-py-container-for-all-policies">
+<h2>PolicyManager.py - container for all policies<a class="headerlink" href="#policymanager-py-container-for-all-policies" title="Permalink to this headline">¶</a></h2>
+<p>Copyright CUED Dialogue Systems Group 2015, 2016</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>CUED Imports/Dependencies: </p>
+<p class="last">import <a class="reference internal" href="Utilities.html#module-utils.Settings" title="utils.Settings"><tt class="xref py py-mod docutils literal"><span class="pre">utils.Settings</span></tt></a> <br />
+import <a class="reference internal" href="Utilities.html#module-utils.ContextLogger" title="utils.ContextLogger"><tt class="xref py py-mod docutils literal"><span class="pre">utils.ContextLogger</span></tt></a> <br />
+import <a class="reference internal" href="Ontology.html#module-ontology.Ontology" title="ontology.Ontology"><tt class="xref py py-mod docutils literal"><span class="pre">ontology.Ontology</span></tt></a> <br />
+import <a class="reference internal" href="Ontology.html#module-ontology.OntologyUtils" title="ontology.OntologyUtils"><tt class="xref py py-mod docutils literal"><span class="pre">ontology.OntologyUtils</span></tt></a></p>
+</div>
+<hr class="docutils" />
+<dl class="class">
+<dt id="policy.PolicyManager.PolicyManager">
+<em class="property">class </em><tt class="descclassname">policy.PolicyManager.</tt><tt class="descname">PolicyManager</tt><a class="headerlink" href="#policy.PolicyManager.PolicyManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>The policy manager manages the policies for all domains.</p>
+<p>It provides the interface to get the next system action based on the current belief state in <a class="reference internal" href="#policy.PolicyManager.PolicyManager.act_on" title="policy.PolicyManager.PolicyManager.act_on"><tt class="xref py py-func docutils literal"><span class="pre">act_on()</span></tt></a> and to initiate the learning in the policy in <a class="reference internal" href="#policy.PolicyManager.PolicyManager.train" title="policy.PolicyManager.PolicyManager.train"><tt class="xref py py-func docutils literal"><span class="pre">train()</span></tt></a>.</p>
+<dl class="method">
+<dt id="policy.PolicyManager.PolicyManager._check_committee">
+<tt class="descname">_check_committee</tt><big>(</big><em>committee</em><big>)</big><a class="headerlink" href="#policy.PolicyManager.PolicyManager._check_committee" title="Permalink to this definition">¶</a></dt>
+<dd><p>Safety tool - should check some logical requirements on the list of domains given by the config</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>committee</strong> (<a class="reference internal" href="#policy.PolicyCommittee.PolicyCommittee" title="policy.PolicyCommittee.PolicyCommittee"><tt class="xref py py-class docutils literal"><span class="pre">PolicyCommittee</span></tt></a>) &#8211; the committee be be checked</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="policy.PolicyManager.PolicyManager._load_committees">
+<tt class="descname">_load_committees</tt><big>(</big><big>)</big><a class="headerlink" href="#policy.PolicyManager.PolicyManager._load_committees" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads and instantiates the committee as configured in config file. The new object is added to the internal
+dictionary.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="policy.PolicyManager.PolicyManager._load_domains_policy">
+<tt class="descname">_load_domains_policy</tt><big>(</big><em>domainString=None</em><big>)</big><a class="headerlink" href="#policy.PolicyManager.PolicyManager._load_domains_policy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads and instantiates the respective policy as configured in config file. The new object is added to the internal
+dictionary.</p>
+<p>Default is &#8216;hdc&#8217;.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>domainString</strong> (<em>str</em>) &#8211; the domain the policy will work on. Default is None.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the new policy object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="policy.PolicyManager.PolicyManager.act_on">
+<tt class="descname">act_on</tt><big>(</big><em>dstring</em>, <em>belief</em>, <em>hyps=None</em><big>)</big><a class="headerlink" href="#policy.PolicyManager.PolicyManager.act_on" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main policy method which maps the provided belief to the next system action. This is called at each turn by <a class="reference internal" href="Agent.html#Agent.DialogueAgent" title="Agent.DialogueAgent"><tt class="xref py py-class docutils literal"><span class="pre">DialogueAgent</span></tt></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>dstring</strong> (<em>str</em>) &#8211; the domain string unique identifier.</li>
+<li><strong>belief</strong> (<em>dict</em>) &#8211; the belief state the policy should act on</li>
+<li><strong>hyps</strong> (<em>list</em>) &#8211; n-best list of semantic interpretations, optional</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the next system action</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="policy.PolicyManager.PolicyManager.bootup">
+<tt class="descname">bootup</tt><big>(</big><em>domainString</em><big>)</big><a class="headerlink" href="#policy.PolicyManager.PolicyManager.bootup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads a policy for a given domain.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="policy.PolicyManager.PolicyManager.finalizeRecord">
+<tt class="descname">finalizeRecord</tt><big>(</big><em>domainRewards</em><big>)</big><a class="headerlink" href="#policy.PolicyManager.PolicyManager.finalizeRecord" title="Permalink to this definition">¶</a></dt>
+<dd><p>Records the final rewards of all domains. In case of a committee, the recording is delegated.</p>
+<p>This method is called once at the end of each dialogue by the <a class="reference internal" href="Agent.html#Agent.DialogueAgent" title="Agent.DialogueAgent"><tt class="xref py py-class docutils literal"><span class="pre">DialogueAgent</span></tt></a>. (One dialogue may contain multiple domains.)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>domainRewards</strong> (<em>dict</em>) &#8211; a dictionary mapping from domains to final rewards</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="policy.PolicyManager.PolicyManager.getLastSystemAction">
+<tt class="descname">getLastSystemAction</tt><big>(</big><em>domainString</em><big>)</big><a class="headerlink" href="#policy.PolicyManager.PolicyManager.getLastSystemAction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the last system action of the specified domain.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>domainString</strong> (<em>str</em>) &#8211; the domain string unique identifier.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the last system action of the given domain or None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="policy.PolicyManager.PolicyManager.printEpisodes">
+<tt class="descname">printEpisodes</tt><big>(</big><big>)</big><a class="headerlink" href="#policy.PolicyManager.PolicyManager.printEpisodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints the recorded episode of the current dialogue.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="policy.PolicyManager.PolicyManager.record">
+<tt class="descname">record</tt><big>(</big><em>reward</em>, <em>domainString</em><big>)</big><a class="headerlink" href="#policy.PolicyManager.PolicyManager.record" title="Permalink to this definition">¶</a></dt>
+<dd><p>Records the current turn reward for the given domain. In case of a committee, the recording is delegated.</p>
+<p>This method is called each turn by the <a class="reference internal" href="Agent.html#Agent.DialogueAgent" title="Agent.DialogueAgent"><tt class="xref py py-class docutils literal"><span class="pre">DialogueAgent</span></tt></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>reward</strong> (<em>int</em>) &#8211; the turn reward to be recorded</li>
+<li><strong>domainString</strong> (<em>str</em>) &#8211; the domain string unique identifier of the domain the reward originates in</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="policy.PolicyManager.PolicyManager.restart">
+<tt class="descname">restart</tt><big>(</big><big>)</big><a class="headerlink" href="#policy.PolicyManager.PolicyManager.restart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Restarts all policies of all domains and resets internal variables.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="policy.PolicyManager.PolicyManager.savePolicy">
+<tt class="descname">savePolicy</tt><big>(</big><em>FORCE_SAVE=False</em><big>)</big><a class="headerlink" href="#policy.PolicyManager.PolicyManager.savePolicy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initiates the policies of all domains to be saved.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>FORCE_SAVE</strong> (<em>bool</em>) &#8211; used to force cleaning up of any learning and saving when we are powering off an agent.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="policy.PolicyManager.PolicyManager.train">
+<tt class="descname">train</tt><big>(</big><big>)</big><a class="headerlink" href="#policy.PolicyManager.PolicyManager.train" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initiates the training for the policies of all domains. This is called at the end of each dialogue by <a class="reference internal" href="Agent.html#Agent.DialogueAgent" title="Agent.DialogueAgent"><tt class="xref py py-class docutils literal"><span class="pre">DialogueAgent</span></tt></a></p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<span class="target" id="module-policy.PolicyCommittee"></span><div class="section" id="policycommittee-py-implementation-of-the-bayesian-committee-machine-for-dialogue-management">
+<h2>PolicyCommittee.py - implementation of the Bayesian committee machine for dialogue management<a class="headerlink" href="#policycommittee-py-implementation-of-the-bayesian-committee-machine-for-dialogue-management" title="Permalink to this headline">¶</a></h2>
+<p>Copyright CUED Dialogue Systems Group 2015, 2016</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>CUED Imports/Dependencies: </p>
+<p class="last">import <tt class="xref py py-mod docutils literal"><span class="pre">GPPolicy</span></tt> <br />
+import <a class="reference internal" href="Utilities.html#module-utils.Settings" title="utils.Settings"><tt class="xref py py-mod docutils literal"><span class="pre">utils.Settings</span></tt></a> <br />
+import <a class="reference internal" href="Utilities.html#module-utils.ContextLogger" title="utils.ContextLogger"><tt class="xref py py-mod docutils literal"><span class="pre">utils.ContextLogger</span></tt></a></p>
+</div>
+<hr class="docutils" />
+<dl class="class">
+<dt id="policy.PolicyCommittee.CommitteeMember">
+<em class="property">class </em><tt class="descclassname">policy.PolicyCommittee.</tt><tt class="descname">CommitteeMember</tt><a class="headerlink" href="#policy.PolicyCommittee.CommitteeMember" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class defining the interface methods which are needed in addition to the basic functionality provided by <a class="reference internal" href="#policy.Policy.Policy" title="policy.Policy.Policy"><tt class="xref py py-class docutils literal"><span class="pre">Policy</span></tt></a></p>
+<p>Committee members should derive from this class.</p>
+<dl class="method">
+<dt id="policy.PolicyCommittee.CommitteeMember.abstract_actions">
+<tt class="descname">abstract_actions</tt><big>(</big><em>actions</em><big>)</big><a class="headerlink" href="#policy.PolicyCommittee.CommitteeMember.abstract_actions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a list of domain acts to their abstract form</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>actions</strong> (<em>list of actions</em>) &#8211; the actions to be abstracted</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="policy.PolicyCommittee.CommitteeMember.getMeanVar_for_executable_actions">
+<tt class="descname">getMeanVar_for_executable_actions</tt><big>(</big><em>belief</em>, <em>abstracted_currentstate</em>, <em>nonExecutableActions</em><big>)</big><a class="headerlink" href="#policy.PolicyCommittee.CommitteeMember.getMeanVar_for_executable_actions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the mean and variance of the Q value based on the abstracted belief state for each executable action.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>belief</strong> (<em>dict</em>) &#8211; the unabstracted current domain belief</li>
+<li><strong>abstracted_currentstate</strong> (<a class="reference internal" href="#policy.Policy.State" title="policy.Policy.State"><tt class="xref py py-class docutils literal"><span class="pre">State</span></tt></a> or subclass) &#8211; the abstracted current belief</li>
+<li><strong>nonExecutableActions</strong> (<em>list</em>) &#8211; actions which are not selected for execution based on heuristic</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="policy.PolicyCommittee.CommitteeMember.getPriorVar">
+<tt class="descname">getPriorVar</tt><big>(</big><em>belief</em>, <em>act</em><big>)</big><a class="headerlink" href="#policy.PolicyCommittee.CommitteeMember.getPriorVar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns prior variance for a given belief and action</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>belief</strong> (<em>dict</em>) &#8211; the unabstracted current domain belief state</li>
+<li><strong>act</strong> (<em>str</em>) &#8211; the unabstracted action</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="policy.PolicyCommittee.CommitteeMember.get_Action">
+<tt class="descname">get_Action</tt><big>(</big><em>action</em><big>)</big><a class="headerlink" href="#policy.PolicyCommittee.CommitteeMember.get_Action" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts the unabstracted domain action into an abstracted action to be used for multiagent learning.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>action</strong> (<em>str</em>) &#8211; the last system action</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="policy.PolicyCommittee.CommitteeMember.get_State">
+<tt class="descname">get_State</tt><big>(</big><em>beliefstate</em>, <em>keep_none=False</em><big>)</big><a class="headerlink" href="#policy.PolicyCommittee.CommitteeMember.get_State" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts the unabstracted domain state into an abstracted belief state to be used with <a class="reference internal" href="#policy.PolicyCommittee.CommitteeMember.getMeanVar_for_executable_actions" title="policy.PolicyCommittee.CommitteeMember.getMeanVar_for_executable_actions"><tt class="xref py py-func docutils literal"><span class="pre">getMeanVar_for_executable_actions()</span></tt></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>beliefstate</strong> (<em>dict</em>) &#8211; the unabstracted belief state</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="policy.PolicyCommittee.CommitteeMember.unabstract_action">
+<tt class="descname">unabstract_action</tt><big>(</big><em>actions</em><big>)</big><a class="headerlink" href="#policy.PolicyCommittee.CommitteeMember.unabstract_action" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a list of abstract acts to their domain form</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>actions</strong> (<em>list of actions</em>) &#8211; the actions to be unabstracted</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="policy.PolicyCommittee.PolicyCommittee">
+<em class="property">class </em><tt class="descclassname">policy.PolicyCommittee.</tt><tt class="descname">PolicyCommittee</tt><big>(</big><em>policyManager</em>, <em>committeeMembers</em>, <em>learningmethod</em><big>)</big><a class="headerlink" href="#policy.PolicyCommittee.PolicyCommittee" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manages everything related to policy committee. All policy members must inherit from <a class="reference internal" href="#policy.Policy.Policy" title="policy.Policy.Policy"><tt class="xref py py-class docutils literal"><span class="pre">Policy</span></tt></a> and <a class="reference internal" href="#policy.PolicyCommittee.CommitteeMember" title="policy.PolicyCommittee.CommitteeMember"><tt class="xref py py-class docutils literal"><span class="pre">CommitteeMember</span></tt></a>.</p>
+<dl class="method">
+<dt id="policy.PolicyCommittee.PolicyCommittee._bayes_committee_calculator">
+<tt class="descname">_bayes_committee_calculator</tt><big>(</big><em>domainQs</em>, <em>priors</em>, <em>domainInControl</em>, <em>scale</em><big>)</big><a class="headerlink" href="#policy.PolicyCommittee.PolicyCommittee._bayes_committee_calculator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given means and variances of committee members - forms the Bayesian committee distribution for each action, draws
+sample from each, returns act with highest sample.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">this implementation is probably <strong>slow</strong> &#8211; can reformat domainQs - and redo this via matricies and slicing</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>domainQs</strong> (<em>dict of domains and dict of actions and dict of variance/mu and values</em>) &#8211; the means and variances of all Q-value estimates of all domains</li>
+<li><strong>priors</strong> (<em>dict of actions and values</em>) &#8211; the prior of the Q-value</li>
+<li><strong>domainInControl</strong> (<em>str</em>) &#8211; domain the dialoge is in</li>
+<li><strong>scale</strong> (<em>float</em>) &#8211; a scaling factor used to control exploration during learning</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the next abstract system action</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="policy.PolicyCommittee.PolicyCommittee._set_multi_agent_learning_weights">
+<tt class="descname">_set_multi_agent_learning_weights</tt><big>(</big><em>comm_meansVars</em>, <em>chosen_act</em><big>)</big><a class="headerlink" href="#policy.PolicyCommittee.PolicyCommittee._set_multi_agent_learning_weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set reward scalings for each committee member. Implements COMMSCALE approach from 
+&#8220;Multi-agent learning in multi-domain spoken dialogue systems&#8221;, Milica Gasic et al. 2015.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>comm_meansVars</strong> (<em>dict of domains and dict of actions and dict of variance/mu and values</em>) &#8211; the means and variances of all committee members</li>
+<li><strong>chosen_act</strong> (<em>str</em>) &#8211; the abstract system action to be executed</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="policy.PolicyCommittee.PolicyCommittee.act_on">
+<tt class="descname">act_on</tt><big>(</big><em>domainInControl</em>, <em>belief</em><big>)</big><a class="headerlink" href="#policy.PolicyCommittee.PolicyCommittee.act_on" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides the next system action based on the domain in control and the belief state.</p>
+<p>The belief state is mapped to an abstract representation which is used for all committee members.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>domainInControl</strong> (<em>str</em>) &#8211; the domain unique identifier string of the domain in control</li>
+<li><strong>belief</strong> (<em>dict</em>) &#8211; the belief state to act on</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the next system action</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="policy.PolicyCommittee.PolicyCommittee.finalizeRecord">
+<tt class="descname">finalizeRecord</tt><big>(</big><em>reward</em>, <em>domainInControl</em><big>)</big><a class="headerlink" href="#policy.PolicyCommittee.PolicyCommittee.finalizeRecord" title="Permalink to this definition">¶</a></dt>
+<dd><p>Records for each committee member the reward and the domain the dialogue has been on</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>reward</strong> (<em>int</em>) &#8211; the final reward to be recorded</li>
+<li><strong>domainInControl</strong> (<em>str</em>) &#8211; the domain the reward was achieved in</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="policy.PolicyCommittee.PolicyCommittee.record">
+<tt class="descname">record</tt><big>(</big><em>reward</em>, <em>domainInControl</em><big>)</big><a class="headerlink" href="#policy.PolicyCommittee.PolicyCommittee.record" title="Permalink to this definition">¶</a></dt>
+<dd><p>record for committee members. in case of multiagent learning, use information held in committee 
+along with the reward to record (b,a) + r</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>reward</strong> (<em>str</em>) &#8211; the turn reward to be recorded</li>
+<li><strong>reward</strong> &#8211; the domain the reward was achieved in</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<span class="target" id="module-policy.HDCPolicy"></span><div class="section" id="hdcpolicy-py-handcrafted-dialogue-manager">
+<h2>HDCPolicy.py - Handcrafted dialogue manager<a class="headerlink" href="#hdcpolicy-py-handcrafted-dialogue-manager" title="Permalink to this headline">¶</a></h2>
+<p>Copyright CUED Dialogue Systems Group 2015, 2016</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>CUED Imports/Dependencies: </p>
+<p class="last">import <a class="reference internal" href="#module-policy.Policy" title="policy.Policy"><tt class="xref py py-mod docutils literal"><span class="pre">policy.Policy</span></tt></a> <br />
+import <a class="reference internal" href="#module-policy.PolicyUtils" title="policy.PolicyUtils"><tt class="xref py py-mod docutils literal"><span class="pre">policy.PolicyUtils</span></tt></a> <br />
+import <a class="reference internal" href="#module-policy.SummaryMapping" title="policy.SummaryMapping"><tt class="xref py py-mod docutils literal"><span class="pre">policy.SummaryMapping</span></tt></a> <br />
+import <a class="reference internal" href="Utilities.html#module-utils.Settings" title="utils.Settings"><tt class="xref py py-mod docutils literal"><span class="pre">utils.Settings</span></tt></a> <br />
+import <a class="reference internal" href="Utilities.html#module-utils.ContextLogger" title="utils.ContextLogger"><tt class="xref py py-mod docutils literal"><span class="pre">utils.ContextLogger</span></tt></a></p>
+</div>
+</div>
+<hr class="docutils" />
+<dl class="class">
+<dt id="policy.HDCPolicy.HDCPolicy">
+<em class="property">class </em><tt class="descclassname">policy.HDCPolicy.</tt><tt class="descname">HDCPolicy</tt><big>(</big><em>use_confreq</em>, <em>domainString</em><big>)</big><a class="headerlink" href="#policy.HDCPolicy.HDCPolicy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handcrafted policy derives from Policy base class. Based on the slots defined in the ontology and fix thresholds, defines a rule-based policy.</p>
+<p>If no info is provided by the user, the system will always ask for the slot information in the same order based on the ontology.</p>
+</dd></dl>
+
+<span class="target" id="module-policy.GPPolicy"></span><div class="section" id="gppolicy-py-gaussian-process-policy">
+<h2>GPPolicy.py - Gaussian Process policy<a class="headerlink" href="#gppolicy-py-gaussian-process-policy" title="Permalink to this headline">¶</a></h2>
+<p>Copyright CUED Dialogue Systems Group 2015, 2016</p>
+<p><strong>Relevant Config variables</strong> [Default values]:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="n">gppolicy</span><span class="p">]</span>
+<span class="n">kernel</span> <span class="o">=</span> <span class="n">polysort</span>
+<span class="n">thetafile</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>    
+</pre></div>
+</div>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>CUED Imports/Dependencies: </p>
+<p class="last">import <tt class="xref py py-mod docutils literal"><span class="pre">policy.GPLib</span></tt> <br />
+import <a class="reference internal" href="#module-policy.Policy" title="policy.Policy"><tt class="xref py py-mod docutils literal"><span class="pre">policy.Policy</span></tt></a> <br />
+import <a class="reference internal" href="Ontology.html#module-ontology.Ontology" title="ontology.Ontology"><tt class="xref py py-mod docutils literal"><span class="pre">ontology.Ontology</span></tt></a> <br />
+import <a class="reference internal" href="Utilities.html#module-utils.Settings" title="utils.Settings"><tt class="xref py py-mod docutils literal"><span class="pre">utils.Settings</span></tt></a> <br />
+import <a class="reference internal" href="Utilities.html#module-utils.ContextLogger" title="utils.ContextLogger"><tt class="xref py py-mod docutils literal"><span class="pre">utils.ContextLogger</span></tt></a></p>
+</div>
+</div>
+<hr class="docutils" />
+<dl class="class">
+<dt id="policy.GPPolicy.GPPolicy">
+<em class="property">class </em><tt class="descclassname">policy.GPPolicy.</tt><tt class="descname">GPPolicy</tt><big>(</big><em>inpolicyfile</em>, <em>outpolicyfile</em>, <em>domainString</em>, <em>learning</em><big>)</big><a class="headerlink" href="#policy.GPPolicy.GPPolicy" title="Permalink to this definition">¶</a></dt>
+<dd><p>An implementation of the dialogue policy based on Gaussian process and the GPSarsa algorithm to optimise actions where states are GPState and actions are GPAction.</p>
+<p>The class implements the public interfaces from <tt class="xref py py-class docutils literal"><span class="pre">Policy</span></tt> and <tt class="xref py py-class docutils literal"><span class="pre">CommitteeMember</span></tt>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="policy.GPPolicy.Kernel">
+<em class="property">class </em><tt class="descclassname">policy.GPPolicy.</tt><tt class="descname">Kernel</tt><big>(</big><em>kernel_type</em>, <em>theta</em>, <em>der=None</em>, <em>action_kernel_type='delta'</em>, <em>action_names=None</em>, <em>domainString=None</em><big>)</big><a class="headerlink" href="#policy.GPPolicy.Kernel" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Kernel class defining the kernel for the GPSARSA algorithm.</p>
+<p>The kernel is usually divided into a belief part where a dot product or an RBF-kernel is used. The action kernel is either the delta function or a handcrafted or distributed kernel.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="policy.GPPolicy.GPAction">
+<em class="property">class </em><tt class="descclassname">policy.GPPolicy.</tt><tt class="descname">GPAction</tt><big>(</big><em>action</em>, <em>numActions</em>, <em>replace={}</em><big>)</big><a class="headerlink" href="#policy.GPPolicy.GPAction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Definition of summary action used for GP-SARSA.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="policy.GPPolicy.GPState">
+<em class="property">class </em><tt class="descclassname">policy.GPPolicy.</tt><tt class="descname">GPState</tt><big>(</big><em>belief</em>, <em>keep_none=False</em>, <em>replace={}</em>, <em>domainString=None</em><big>)</big><a class="headerlink" href="#policy.GPPolicy.GPState" title="Permalink to this definition">¶</a></dt>
+<dd><p>Definition of state representation needed for GP-SARSA algorithm
+Main requirement for the ability to compute kernel function over two states</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="policy.GPPolicy.TerminalGPAction">
+<em class="property">class </em><tt class="descclassname">policy.GPPolicy.</tt><tt class="descname">TerminalGPAction</tt><a class="headerlink" href="#policy.GPPolicy.TerminalGPAction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class representing the action object recorded in the (b,a) pair along with the final reward.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="policy.GPPolicy.TerminalGPState">
+<em class="property">class </em><tt class="descclassname">policy.GPPolicy.</tt><tt class="descname">TerminalGPState</tt><a class="headerlink" href="#policy.GPPolicy.TerminalGPState" title="Permalink to this definition">¶</a></dt>
+<dd><p>Basic object to explicitly denote the terminal state. Always transition into this state at dialogues completion.</p>
+</dd></dl>
+
+<p>-. automodule:: policy.GPLib
+.. autoclass:: policy.GPLib.GPSARSA
+.. autoclass:: policy.GPLib.GPSARSAPrior
+.. autoclass:: policy.GPLib.LearnerInterface</p>
+<span class="target" id="module-policy.HDCTopicManager"></span><div class="section" id="hdctopicmanager-py-policy-for-the-front-end-topic-manager">
+<h2>HDCTopicManager.py - policy for the front end topic manager<a class="headerlink" href="#hdctopicmanager-py-policy-for-the-front-end-topic-manager" title="Permalink to this headline">¶</a></h2>
+<p>Copyright CUED Dialogue Systems Group 2015, 2016</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>CUED Imports/Dependencies: </p>
+<p class="last">import <a class="reference internal" href="#module-policy.Policy" title="policy.Policy"><tt class="xref py py-mod docutils literal"><span class="pre">policy.Policy</span></tt></a> <br />
+import <a class="reference internal" href="Utilities.html#module-utils.Settings" title="utils.Settings"><tt class="xref py py-mod docutils literal"><span class="pre">utils.Settings</span></tt></a> <br />
+import <a class="reference internal" href="Utilities.html#module-utils.ContextLogger" title="utils.ContextLogger"><tt class="xref py py-mod docutils literal"><span class="pre">utils.ContextLogger</span></tt></a></p>
+</div>
+</div>
+<hr class="docutils" />
+<dl class="class">
+<dt id="policy.HDCTopicManager.HDCTopicManagerPolicy">
+<em class="property">class </em><tt class="descclassname">policy.HDCTopicManager.</tt><tt class="descname">HDCTopicManagerPolicy</tt><a class="headerlink" href="#policy.HDCTopicManager.HDCTopicManagerPolicy" title="Permalink to this definition">¶</a></dt>
+<dd><p>The dialogue while being in the process of finding the topic/domain of the conversation.</p>
+<p>At the current stage, this only happens at the beginning of the dialogue, so this policy has to take care of wecoming the user as well as creating actions which disambiguate/clarify the topic of the interaction.</p>
+<p>It allows for the system to hang up if the topic could not be identified after a specified amount of attempts.</p>
+</dd></dl>
+
+<span class="target" id="module-policy.WikipediaTools"></span><div class="section" id="wikipediatools-py-basic-tools-to-access-wikipedia">
+<h2>WikipediaTools.py - basic tools to access wikipedia<a class="headerlink" href="#wikipediatools-py-basic-tools-to-access-wikipedia" title="Permalink to this headline">¶</a></h2>
+<p>Copyright CUED Dialogue Systems Group 2015, 2016</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>CUED Imports/Dependencies:</p>
+<p class="last">import <a class="reference internal" href="#module-policy.Policy" title="policy.Policy"><tt class="xref py py-mod docutils literal"><span class="pre">policy.Policy</span></tt></a> <br />
+import <a class="reference internal" href="Utilities.html#module-utils.Settings" title="utils.Settings"><tt class="xref py py-mod docutils literal"><span class="pre">utils.Settings</span></tt></a> <br />
+import <a class="reference internal" href="Utilities.html#module-utils.ContextLogger" title="utils.ContextLogger"><tt class="xref py py-mod docutils literal"><span class="pre">utils.ContextLogger</span></tt></a></p>
+</div>
+</div>
+<hr class="docutils" />
+<dl class="class">
+<dt id="policy.WikipediaTools.WikipediaDM">
+<em class="property">class </em><tt class="descclassname">policy.WikipediaTools.</tt><tt class="descname">WikipediaDM</tt><a class="headerlink" href="#policy.WikipediaTools.WikipediaDM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dialogue Manager interface to Wikipedia &#8211; developement state.</p>
+</dd></dl>
+
+<span class="target" id="module-policy.SummaryAction"></span><div class="section" id="summaryaction-py-mapping-between-summary-and-master-actions">
+<h2>SummaryAction.py - Mapping between summary and master actions<a class="headerlink" href="#summaryaction-py-mapping-between-summary-and-master-actions" title="Permalink to this headline">¶</a></h2>
+<p>Copyright CUED Dialogue Systems Group 2015, 2016</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>CUED Imports/Dependencies: </p>
+<p class="last">import <a class="reference internal" href="#module-policy.SummaryMapping" title="policy.SummaryMapping"><tt class="xref py py-mod docutils literal"><span class="pre">policy.SummaryMapping</span></tt></a> <br />
+import <a class="reference internal" href="#module-policy.PolicyUtils" title="policy.PolicyUtils"><tt class="xref py py-mod docutils literal"><span class="pre">policy.PolicyUtils</span></tt></a> <br />
+import <a class="reference internal" href="Ontology.html#module-ontology.Ontology" title="ontology.Ontology"><tt class="xref py py-mod docutils literal"><span class="pre">ontology.Ontology</span></tt></a> <br />
+import <a class="reference internal" href="Utilities.html#module-utils.ContextLogger" title="utils.ContextLogger"><tt class="xref py py-mod docutils literal"><span class="pre">utils.ContextLogger</span></tt></a></p>
+</div>
+</div>
+<hr class="docutils" />
+<dl class="class">
+<dt id="policy.SummaryAction.SummaryAction">
+<em class="property">class </em><tt class="descclassname">policy.SummaryAction.</tt><tt class="descname">SummaryAction</tt><big>(</big><em>domainString</em>, <em>empty=False</em><big>)</big><a class="headerlink" href="#policy.SummaryAction.SummaryAction" title="Permalink to this definition">¶</a></dt>
+<dd><p>The summary action class encapsulates the functionality of a summary action along with the conversion from summary to master actions.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The list of all possible summary actions are defined in this class.</p>
+</div>
+</dd></dl>
+
+<span class="target" id="module-policy.PolicyUtils"></span><div class="section" id="policyutils-py-utility-methods-for-policies">
+<h2>PolicyUtils.py - Utility Methods for Policies<a class="headerlink" href="#policyutils-py-utility-methods-for-policies" title="Permalink to this headline">¶</a></h2>
+<p>Copyright CUED Dialogue Systems Group 2015, 2016</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">DMUtils.py is a collection of utility functions only (No classes).</p>
+</div>
+<p>Local/file variables:</p>
+<div class="highlight-python"><pre>ZERO_THRESHOLD:             unused
+REQUESTING_THRESHOLD:       affects getRequestedSlots() method</pre>
+</div>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>CUED Imports/Dependencies: </p>
+<p class="last">import <a class="reference internal" href="Ontology.html#module-ontology.Ontology" title="ontology.Ontology"><tt class="xref py py-mod docutils literal"><span class="pre">ontology.Ontology</span></tt></a> <br />
+import <a class="reference internal" href="Utilities.html#module-utils.DiaAct" title="utils.DiaAct"><tt class="xref py py-mod docutils literal"><span class="pre">utils.DiaAct</span></tt></a> <br />
+import <a class="reference internal" href="Utilities.html#module-utils.ContextLogger" title="utils.ContextLogger"><tt class="xref py py-mod docutils literal"><span class="pre">utils.ContextLogger</span></tt></a></p>
+</div>
+<hr class="docutils" />
+<dl class="function">
+<dt id="policy.PolicyUtils.add_venue_count">
+<tt class="descclassname">policy.PolicyUtils.</tt><tt class="descname">add_venue_count</tt><big>(</big><em>input</em>, <em>belief</em>, <em>domainString</em><big>)</big><a class="headerlink" href="#policy.PolicyUtils.add_venue_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add venue count.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>input</strong> &#8211; String input act.</li>
+<li><strong>belief</strong> &#8211; Belief state</li>
+<li><strong>domainString</strong> (<em>str</em>) &#8211; domain tag like &#8216;SFHotels&#8217;</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">act with venue count.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="policy.PolicyUtils.checkDirExistsAndMake">
+<tt class="descclassname">policy.PolicyUtils.</tt><tt class="descname">checkDirExistsAndMake</tt><big>(</big><em>fullpath</em><big>)</big><a class="headerlink" href="#policy.PolicyUtils.checkDirExistsAndMake" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used when saving a policy &#8211; if dir doesn&#8217;t exisit &#8211;&gt; is created</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="policy.PolicyUtils.computeInformAction">
+<tt class="descclassname">policy.PolicyUtils.</tt><tt class="descname">computeInformAction</tt><big>(</big><em>belief</em>, <em>numAccepted</em>, <em>domainString</em><big>)</big><a class="headerlink" href="#policy.PolicyUtils.computeInformAction" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Method for global inform action:</strong> returns summary inform action string</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>belief</strong> (<em>dict</em>) &#8211; full belief state</li>
+<li><strong>numAccepted</strong> (<em>int</em>) &#8211; number of slots with prob. mass &gt; 80</li>
+<li><strong>domainString</strong> (<em>str</em>) &#8211; domain tag</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">summary action name, getInformAction(numAccepted,belief)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="policy.PolicyUtils.findMinimalAcceptedSetForNoEntities">
+<tt class="descclassname">policy.PolicyUtils.</tt><tt class="descname">findMinimalAcceptedSetForNoEntities</tt><big>(</big><em>acceptedValues</em>, <em>domainString</em><big>)</big><a class="headerlink" href="#policy.PolicyUtils.findMinimalAcceptedSetForNoEntities" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Method for global inform action:</strong> drops accepted slots to allow a database entity to be found.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>acceptedValues</strong> (<em>dict</em>) &#8211; of accepted values</li>
+<li><strong>domainString</strong> (<em>str</em>) &#8211; domain tag</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">(dict) acceptedvalues dict with at least one slot/constraint removed</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="policy.PolicyUtils.getGlobalAction">
+<tt class="descclassname">policy.PolicyUtils.</tt><tt class="descname">getGlobalAction</tt><big>(</big><em>belief</em>, <em>globalact</em>, <em>domainString</em>, <em>bookinginfo=None</em><big>)</big><a class="headerlink" href="#policy.PolicyUtils.getGlobalAction" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Method for global action:</strong> returns action</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>belief</strong> (<em>dict</em>) &#8211; full belief state</li>
+<li><strong>globalact</strong> (<em>int</em>) &#8211; <ul>
+<li>str of globalActionName, e.g. &#8216;INFORM_REQUESTED&#8217;</li>
+</ul>
+</li>
+<li><strong>domainString</strong> (<em>str</em>) &#8211; domain tag</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">(str) action</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="policy.PolicyUtils.getInformAcceptedSlotsAboutEntity">
+<tt class="descclassname">policy.PolicyUtils.</tt><tt class="descname">getInformAcceptedSlotsAboutEntity</tt><big>(</big><em>acceptanceList</em>, <em>ent</em>, <em>numFeats</em><big>)</big><a class="headerlink" href="#policy.PolicyUtils.getInformAcceptedSlotsAboutEntity" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Method for global inform action:</strong> returns filled out inform() string
+need to be cleaned (Dongho)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>acceptanceList</strong> (<em>dict</em>) &#8211; of slots with value:prob mass pairs</li>
+<li><strong>ent</strong> (<em>dict</em>) &#8211; slot:value properties for this entity</li>
+<li><strong>numFeats</strong> (<em>int</em>) &#8211; result of globalOntology.entity_by_features(acceptedValues)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">(str) filled out inform() act</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="policy.PolicyUtils.getInformAction">
+<tt class="descclassname">policy.PolicyUtils.</tt><tt class="descname">getInformAction</tt><big>(</big><em>numAccepted</em>, <em>belief</em>, <em>domainString</em><big>)</big><a class="headerlink" href="#policy.PolicyUtils.getInformAction" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Method for global inform action:</strong> returns inform act via getInformExactEntity() method             or null() if not enough accepted</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>belief</strong> (<em>dict</em>) &#8211; full belief state</li>
+<li><strong>numAccepted</strong> (<em>int</em>) &#8211; number of slots with prob. mass &gt; 80</li>
+<li><strong>domainString</strong> (<em>str</em>) &#8211; domain tag</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">getInformExactEntity(acceptanceList,numAccepted)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="policy.PolicyUtils.getInformExactEntity">
+<tt class="descclassname">policy.PolicyUtils.</tt><tt class="descname">getInformExactEntity</tt><big>(</big><em>acceptanceList</em>, <em>numAccepted</em>, <em>domainString</em><big>)</big><a class="headerlink" href="#policy.PolicyUtils.getInformExactEntity" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Method for global inform action:</strong> creates inform act with none or an entity</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>acceptanceList</strong> (<em>dict</em>) &#8211; of slots with value:prob mass pairs</li>
+<li><strong>numAccepted</strong> (<em>int</em>) &#8211; number of <em>accepted slots</em> (&gt;80 prob mass)</li>
+<li><strong>domainString</strong> (<em>str</em>) &#8211; domain tag</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">getInformNoneVenue() or getInformAcceptedSlotsAboutEntity() as appropriate</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="policy.PolicyUtils.getInformNoMoreVenues">
+<tt class="descclassname">policy.PolicyUtils.</tt><tt class="descname">getInformNoMoreVenues</tt><big>(</big><em>acceptanceList</em>, <em>entities</em>, <em>numFeats</em><big>)</big><a class="headerlink" href="#policy.PolicyUtils.getInformNoMoreVenues" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Method for global inform action:</strong> returns inform(name=none, other than x and y, with constraints w and z) act</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>acceptanceList</strong> (<em>dict</em>) &#8211; of slots with value:prob mass pairs</li>
+<li><strong>entities</strong> (<em>list</em>) &#8211; of database entity dicts</li>
+<li><strong>numFeats</strong> (<em>int</em>) &#8211; number of constraints</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">(str) inform() action</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="policy.PolicyUtils.getInformNoneVenue">
+<tt class="descclassname">policy.PolicyUtils.</tt><tt class="descname">getInformNoneVenue</tt><big>(</big><em>acceptedValues</em>, <em>domainString</em><big>)</big><a class="headerlink" href="#policy.PolicyUtils.getInformNoneVenue" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Method for global inform action:</strong> creates inform(name=none,...) act</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>acceptedValues</strong> (<em>dict</em>) &#8211; of accepted values</li>
+<li><strong>domainString</strong> (<em>str</em>) &#8211; domain tag</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">(str) inform(name=none,...) act</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="policy.PolicyUtils.getRequestedSlots">
+<tt class="descclassname">policy.PolicyUtils.</tt><tt class="descname">getRequestedSlots</tt><big>(</big><em>belief</em><big>)</big><a class="headerlink" href="#policy.PolicyUtils.getRequestedSlots" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Method for belief states:</strong> Iterate over only goal slots</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>belief</strong> (<em>dict</em>) &#8211; of dicts - full belief state</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">(list) of slot names with prob retrieved from belief &gt; REQUESTING_THRESHOLD (an internal global)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="policy.PolicyUtils.getSlotLevelAction">
+<tt class="descclassname">policy.PolicyUtils.</tt><tt class="descname">getSlotLevelAction</tt><big>(</big><em>belief</em>, <em>slot</em>, <em>action</em>, <em>disableLowProbAct=False</em>, <em>domainString=None</em><big>)</big><a class="headerlink" href="#policy.PolicyUtils.getSlotLevelAction" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Slot-level actions:</strong> forms slot level action</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>belief</strong> (<em>dict</em>) &#8211; full belief state</li>
+<li><strong>slot</strong> (<em>str</em>) &#8211; None</li>
+<li><strong>actions</strong> (<em>int</em>) &#8211; 0-request, 1-confirm, 2-select</li>
+<li><strong>disableLowProbAct</strong> (<em>bool  [Default=False]</em>) &#8211; </li>
+<li><strong>domainString</strong> (<em>str</em>) &#8211; domain name</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">summary action name (str), master slot action (str)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="policy.PolicyUtils.getTopBelief">
+<tt class="descclassname">policy.PolicyUtils.</tt><tt class="descname">getTopBelief</tt><big>(</big><em>slot_belief</em><big>)</big><a class="headerlink" href="#policy.PolicyUtils.getTopBelief" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Method for belief states:</strong> Return slot value with the largest belief</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>slot_belief</strong> (<em>dict</em>) &#8211; of value:prob pairs for slot distribution</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">top_value (str), top_belief (float)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="policy.PolicyUtils.getTopBeliefs">
+<tt class="descclassname">policy.PolicyUtils.</tt><tt class="descname">getTopBeliefs</tt><big>(</big><em>belief</em>, <em>threshold='auto'</em>, <em>domainString=None</em><big>)</big><a class="headerlink" href="#policy.PolicyUtils.getTopBeliefs" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Method for belief states:</strong> Get slot values with belief larger than threshold</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>belief</strong> (<em>dict</em>) &#8211; None</li>
+<li><strong>threshold</strong> (<em>str or float</em>) &#8211; threshold on slot value probabilities. Default value is &#8216;auto&#8217;, only allowable string</li>
+<li><strong>domainString</strong> (<em>str</em>) &#8211; tag like &#8216;CamRestaurants&#8217;</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">(dict) as {slot: (topvalue, topbelief), ...}</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="policy.PolicyUtils.getTopTwoBeliefsExcludingNone">
+<tt class="descclassname">policy.PolicyUtils.</tt><tt class="descname">getTopTwoBeliefsExcludingNone</tt><big>(</big><em>slot_belief</em><big>)</big><a class="headerlink" href="#policy.PolicyUtils.getTopTwoBeliefsExcludingNone" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Method for belief states:</strong> top two (value,belief) in slot</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>slot_belief</strong> (<em>dict</em>) &#8211; of value:prob pairs for slot distribution</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">ans (list), is_top_none (bool)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<span class="target" id="module-policy.SummaryMapping"></span><div class="section" id="summarymapping-py-summarises-dialog-events-for-mapping-from-master-to-summary-belief">
+<h2>SummaryMapping.py - summarises dialog events for mapping from master to summary belief<a class="headerlink" href="#summarymapping-py-summarises-dialog-events-for-mapping-from-master-to-summary-belief" title="Permalink to this headline">¶</a></h2>
+<p>Copyright CUED Dialogue Systems Group 2015, 2016</p>
+<dl class="docutils">
+<dt><strong>Basic Usage</strong>: </dt>
+<dd><div class="first last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">SummaryMapping</span>   
+</pre></div>
+</div>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">No classes; collection of utility methods</p>
+</div>
+<p>Local module variables:</p>
+<div class="highlight-python"><pre>global_summary_features:    (list) global actions/methods
+ZERO_THRESHOLD:             (float) 0.001 min prob value to be considered non-zero</pre>
+</div>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>CUED Imports/Dependencies: </p>
+<p class="last">import <a class="reference internal" href="#module-policy.PolicyUtils" title="policy.PolicyUtils"><tt class="xref py py-mod docutils literal"><span class="pre">policy.PolicyUtils</span></tt></a> <br />
+import <a class="reference internal" href="Ontology.html#module-ontology.Ontology" title="ontology.Ontology"><tt class="xref py py-mod docutils literal"><span class="pre">ontology.Ontology</span></tt></a> <br />
+import <a class="reference internal" href="Utilities.html#module-utils.Settings" title="utils.Settings"><tt class="xref py py-mod docutils literal"><span class="pre">utils.Settings</span></tt></a></p>
+</div>
+</div>
+<hr class="docutils" />
+<span class="target" id="module-policy.BCM_Tools"></span><div class="section" id="bcm-tools-py-script-for-creating-slot-abstraction-mapping-files">
+<h2>BCM_Tools.py - Script for creating slot abstraction mapping files<a class="headerlink" href="#bcm-tools-py-script-for-creating-slot-abstraction-mapping-files" title="Permalink to this headline">¶</a></h2>
+<p>Copyright CUED Dialogue Systems Group 2015, 2016</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Collection of utility classes and methods</p>
+</div>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>CUED Imports/Dependencies: </p>
+<p class="last">import <a class="reference internal" href="Ontology.html#module-ontology.Ontology" title="ontology.Ontology"><tt class="xref py py-class docutils literal"><span class="pre">ontology.Ontology</span></tt></a> <br />
+import <a class="reference internal" href="Utilities.html#module-utils.Settings" title="utils.Settings"><tt class="xref py py-class docutils literal"><span class="pre">utils.Settings</span></tt></a> <br />
+import <a class="reference internal" href="Utilities.html#module-utils.ContextLogger" title="utils.ContextLogger"><tt class="xref py py-class docutils literal"><span class="pre">utils.ContextLogger</span></tt></a></p>
+</div>
+<hr class="docutils" />
+<p>This script is used to create a mapping from slot names to abstract slot (like slot0, slot1 etc), highest entropy to lowest. Writes mapping to JSON file</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="../_static/../../../Docs/cued_logo.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyDial</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Adding.html">How to add content to these pages</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="GeneralNotes.html">General System  Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Agent.html">Agent - the Complete Dialogue System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BeliefTracking.html">Belief Tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Evaluation.html">Evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Ontology.html">Ontology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="NLGeneration.html">Natural Language Generation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Policy</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#policy-py-abstract-class-for-all-policies">Policy.py - abstract class for all policies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#policymanager-py-container-for-all-policies">PolicyManager.py - container for all policies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#policycommittee-py-implementation-of-the-bayesian-committee-machine-for-dialogue-management">PolicyCommittee.py - implementation of the Bayesian committee machine for dialogue management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hdcpolicy-py-handcrafted-dialogue-manager">HDCPolicy.py - Handcrafted dialogue manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#gppolicy-py-gaussian-process-policy">GPPolicy.py - Gaussian Process policy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hdctopicmanager-py-policy-for-the-front-end-topic-manager">HDCTopicManager.py - policy for the front end topic manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#wikipediatools-py-basic-tools-to-access-wikipedia">WikipediaTools.py - basic tools to access wikipedia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#summaryaction-py-mapping-between-summary-and-master-actions">SummaryAction.py - Mapping between summary and master actions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#policyutils-py-utility-methods-for-policies">PolicyUtils.py - Utility Methods for Policies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#summarymapping-py-summarises-dialog-events-for-mapping-from-master-to-summary-belief">SummaryMapping.py - summarises dialog events for mapping from master to summary belief</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bcm-tools-py-script-for-creating-slot-abstraction-mapping-files">BCM_Tools.py - Script for creating slot abstraction mapping files</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="SemanticParsing.html">Semantic Parsing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SemanticBeliefTracking.html">Semantic Belief Tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Simulation.html">Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Systems.html">Dialogue Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tests.html">Tests executed by nosetests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="TopicTracking.html">Topic Tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Utilities.html">Utility Modules</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Papers.html">Interesting / Relevant Papers</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="NLGeneration.html" title="previous chapter">Natural Language Generation</a></li>
+      <li>Next: <a href="SemanticParsing.html" title="next chapter">Semantic Parsing</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, Dongho Kim, David Vandyke, Lina Rojas, Milica Gasic, Stefan Ultes, Steve Young.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.1.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster </a>
+      
+      |
+      <a href="../_sources/Docs/Policy.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

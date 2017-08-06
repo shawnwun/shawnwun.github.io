@@ -1,0 +1,814 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Utility Modules &mdash; PyDial 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="PyDial 1.0.0 documentation" href="../index.html" />
+    <link rel="next" title="Interesting / Relevant Papers" href="Papers.html" />
+    <link rel="prev" title="Topic Tracking" href="TopicTracking.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="utility-modules">
+<h1>Utility Modules<a class="headerlink" href="#utility-modules" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-utils.ContextLogger"></span><div class="section" id="contextlogger-py-wrapper-for-python-logging-api">
+<h2>ContextLogger.py - wrapper for Python logging API<a class="headerlink" href="#contextlogger-py-wrapper-for-python-logging-api" title="Permalink to this headline">¶</a></h2>
+<p>Copyright CUED Dialogue Systems Group 2015, 2016</p>
+<dl class="docutils">
+<dt><strong>Basic Usage</strong>:</dt>
+<dd><div class="first last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">utils</span> <span class="kn">import</span> <span class="n">ContextLogger</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ContextLogger</span><span class="o">.</span><span class="n">createLoggingHandlers</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">logger</span> <span class="o">=</span> <span class="n">ContextLogger</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s">&#39;Name&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<p>then within any script issue debug, info, warning and error messages, eg</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&quot;String too long [</span><span class="si">%d</span><span class="s">]&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>issuing an error message generates <tt class="docutils literal"><span class="pre">ExceptionRaisedByLogger</span></tt>.</p>
+<p>Logger can if required be configured via a config section:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="n">logging</span><span class="p">]</span>
+<span class="n">screen_level</span><span class="o">=</span><span class="n">info</span>
+<span class="n">file_level</span><span class="o">=</span><span class="n">debug</span>
+<span class="nb">file</span><span class="o">=</span><span class="n">logFileName</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">usecolor</span> <span class="o">=</span> <span class="bp">False</span>
+</pre></div>
+</div>
+<p>Then pass config info to <tt class="docutils literal"><span class="pre">createLoggingHandlers</span></tt></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ContextLogger</span><span class="o">.</span><span class="n">createLoggingHandlers</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+</pre></div>
+</div>
+<hr class="docutils" />
+<dl class="class">
+<dt id="utils.ContextLogger.ConsoleFormatter">
+<em class="property">class </em><tt class="descclassname">utils.ContextLogger.</tt><tt class="descname">ConsoleFormatter</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#utils.ContextLogger.ConsoleFormatter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="utils.ContextLogger.ContextLogger">
+<em class="property">class </em><tt class="descclassname">utils.ContextLogger.</tt><tt class="descname">ContextLogger</tt><big>(</big><em>module_name=None</em>, <em>*args</em><big>)</big><a class="headerlink" href="#utils.ContextLogger.ContextLogger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper for Python logging class.</p>
+<dl class="method">
+<dt id="utils.ContextLogger.ContextLogger.addContext">
+<tt class="descname">addContext</tt><big>(</big><em>*args</em>, <em>**kwds</em><big>)</big><a class="headerlink" href="#utils.ContextLogger.ContextLogger.addContext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a nested named context for use in a <tt class="docutils literal"><span class="pre">with</span></tt> statement.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>args</strong> &#8211; list of one or more context names (str)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">ContextManager</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>Example:</dt>
+<dd><div class="first last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">mylogger</span><span class="o">.</span><span class="n">addContext</span><span class="p">(</span><span class="s">&quot;Session 1&quot;</span><span class="p">)</span> <span class="p">:</span>
+<span class="gp">... </span>   <span class="n">mylogger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&quot;Warn Message from Session 1&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="utils.ContextLogger.ContextLogger.addTimedContext">
+<tt class="descname">addTimedContext</tt><big>(</big><em>*args</em>, <em>**kwds</em><big>)</big><a class="headerlink" href="#utils.ContextLogger.ContextLogger.addTimedContext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a timed nested named context for use in a <tt class="docutils literal"><span class="pre">with</span></tt> statement.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>args</strong> &#8211; list of one or more context names (str)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">ContextManager</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>Example:</dt>
+<dd><div class="first last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">mylogger</span><span class="o">.</span><span class="n">addContext</span><span class="p">(</span><span class="s">&quot;Session 1&quot;</span><span class="p">)</span> <span class="p">:</span>
+<span class="gp">... </span>   <span class="n">Dostuff</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<p>On exit from the <tt class="docutils literal"><span class="pre">with</span></tt> statement, the elapsed time is logged.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="utils.ContextLogger.ContextLogger.debug">
+<tt class="descname">debug</tt><big>(</big><em>msg</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#utils.ContextLogger.ContextLogger.debug" title="Permalink to this definition">¶</a></dt>
+<dd><p>Log a DEBUG message.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>msg</strong> (<em>formatted-str</em>) &#8211; message string</li>
+<li><strong>args</strong> &#8211; args to formatted message string if any</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="utils.ContextLogger.ContextLogger.error">
+<tt class="descname">error</tt><big>(</big><em>msg</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#utils.ContextLogger.ContextLogger.error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Log an ERROR message.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>msg</strong> (<em>formatted-str</em>) &#8211; message string</li>
+<li><strong>args</strong> &#8211; args to formatted message string if any</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Issuing an error message also raises exception <tt class="docutils literal"><span class="pre">ExceptionRaisedByLogger</span></tt></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="utils.ContextLogger.ContextLogger.info">
+<tt class="descname">info</tt><big>(</big><em>msg</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#utils.ContextLogger.ContextLogger.info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Log an INFO message.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>msg</strong> (<em>formatted-str</em>) &#8211; message string</li>
+<li><strong>args</strong> &#8211; args to formatted message string if any</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="utils.ContextLogger.ContextLogger.setLevel">
+<tt class="descname">setLevel</tt><big>(</big><em>level</em><big>)</big><a class="headerlink" href="#utils.ContextLogger.ContextLogger.setLevel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the logging level of this logger.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>level</strong> (<em>str</em>) &#8211; default screen logging level if no config</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="utils.ContextLogger.ContextLogger.warning">
+<tt class="descname">warning</tt><big>(</big><em>msg</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#utils.ContextLogger.ContextLogger.warning" title="Permalink to this definition">¶</a></dt>
+<dd><p>Log a WARNING message.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>msg</strong> (<em>formatted-str</em>) &#8211; message string</li>
+<li><strong>args</strong> &#8211; args to formatted message string if any</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="utils.ContextLogger.NOcolors">
+<em class="property">class </em><tt class="descclassname">utils.ContextLogger.</tt><tt class="descname">NOcolors</tt><a class="headerlink" href="#utils.ContextLogger.NOcolors" title="Permalink to this definition">¶</a></dt>
+<dd><p>ASCII escape chars just print junk when dumping logger output to file. Can use the config setting usecolor.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.ContextLogger.createLoggingHandlers">
+<tt class="descclassname">utils.ContextLogger.</tt><tt class="descname">createLoggingHandlers</tt><big>(</big><em>config=None</em>, <em>screen_level='INFO'</em>, <em>log_file=None</em>, <em>file_level='DEBUG'</em>, <em>use_color=True</em><big>)</big><a class="headerlink" href="#utils.ContextLogger.createLoggingHandlers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a top level logger and configure logging handlers</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>config</strong> &#8211; a config structure as returned by the std ConfigParser <br /></li>
+<li><strong>screen_level</strong> (<em>str</em>) &#8211; default screen logging level if no config <br /></li>
+<li><strong>log_file</strong> (<em>str</em>) &#8211; default log file if no config <br /></li>
+<li><strong>file_level</strong> (<em>str</em>) &#8211; default file logging level if no config</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Valid logging levels are &#8220;DEBUG&#8221;, &#8220;INFO&#8221;, &#8220;WARNING&#8221;, &#8220;ERROR&#8221;</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.ContextLogger.getLogger">
+<tt class="descclassname">utils.ContextLogger.</tt><tt class="descname">getLogger</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#utils.ContextLogger.getLogger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve or if necessary create a context logger with specified name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<em>str</em>) &#8211; name of logger to create or retrieve</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">logger (ContextLogger.ContextLogger)</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Use <strong>only</strong> this function to create instances of the ContextLogger class</p>
+</div>
+</dd></dl>
+
+</div>
+<span class="target" id="module-utils.dact"></span><div class="section" id="dact-py-dialogue-act-specification">
+<h2>dact.py - dialogue act specification<a class="headerlink" href="#dact-py-dialogue-act-specification" title="Permalink to this headline">¶</a></h2>
+<p>Copyright CUED Dialogue Systems Group 2015, 2016</p>
+<dl class="docutils">
+<dt><strong>Basic Usage</strong>: </dt>
+<dd><div class="first last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">dact</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Copied from dstc-ii code</p>
+</div>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>CUED Imports/Dependencies: </p>
+<p class="last">import <a class="reference internal" href="#module-utils.ContextLogger" title="utils.ContextLogger"><tt class="xref py py-class docutils literal"><span class="pre">utils.ContextLogger</span></tt></a></p>
+</div>
+<hr class="docutils" />
+<dl class="class">
+<dt id="utils.dact.DactItem">
+<em class="property">class </em><tt class="descclassname">utils.dact.</tt><tt class="descname">DactItem</tt><big>(</big><em>slot</em>, <em>op</em>, <em>val</em><big>)</big><a class="headerlink" href="#utils.dact.DactItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dialogue act specification</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>slot</strong> (<em>str</em>) &#8211; slot name</li>
+<li><strong>op</strong> (<em>str</em>) &#8211; comparative operation, e.g. &#8216;=&#8217; or &#8216;!=&#8217;</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="utils.dact.DactItem.match">
+<tt class="descname">match</tt><big>(</big><em>other</em><big>)</big><a class="headerlink" href="#utils.dact.DactItem.match" title="Permalink to this definition">¶</a></dt>
+<dd><p>Commutative operation for comparing two items.
+Note that &#8220;self&#8221; is the goal constraint, and &#8220;other&#8221; is from the system action.
+The item in &#8220;other&#8221; must be more specific. For example, the system action confirm(food=dontcare) doesn&#8217;t match
+the goal with food=chinese, but confirm(food=chinese) matches the goal food=dontcare.</p>
+<p>If slots are different, return True.</p>
+<dl class="docutils">
+<dt>If slots are the same, (possible values are x, y, dontcare, !x, !y, !dontcare)s</dt>
+<dd><p class="first">x, x = True
+x, y = False
+dontcare, x = True
+x, dontcare = False
+dontcare, dontcare = True</p>
+<p>x, !x = False
+x, !y = True
+x, !dontcare = True
+dontcare, !x = False
+dontcare, !dontcare = False</p>
+<p class="last">!x, !x = True
+!x, !y = True
+!x, !dontcare = True
+!dontcare, !dontcare = True</p>
+</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>other</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<span class="target" id="module-utils.DiaAct"></span><div class="section" id="diaact-py-dialogue-act-specification">
+<h2>DiaAct.py - dialogue act specification<a class="headerlink" href="#diaact-py-dialogue-act-specification" title="Permalink to this headline">¶</a></h2>
+<p>Copyright CUED Dialogue Systems Group 2015, 2016</p>
+<dl class="docutils">
+<dt><strong>Basic Usage</strong>: </dt>
+<dd><div class="first last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">DiaAct</span>   
+</pre></div>
+</div>
+</dd>
+</dl>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>CUED Imports/Dependencies: </p>
+<p class="last">import <a class="reference internal" href="#module-utils.ContextLogger" title="utils.ContextLogger"><tt class="xref py py-class docutils literal"><span class="pre">utils.ContextLogger</span></tt></a> <br />
+import <tt class="xref py py-class docutils literal"><span class="pre">dact</span></tt></p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This extends the preexisting dact.py from dstcii</p>
+</div>
+<hr class="docutils" />
+<dl class="class">
+<dt id="utils.DiaAct.DiaAct">
+<em class="property">class </em><tt class="descclassname">utils.DiaAct.</tt><tt class="descname">DiaAct</tt><big>(</big><em>act</em><big>)</big><a class="headerlink" href="#utils.DiaAct.DiaAct" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dialogue act class.</p>
+<p>self.dact = <tt class="docutils literal"><span class="pre">{'act':</span> <span class="pre">acttype,'slots':</span> <span class="pre">[(slot1,</span> <span class="pre">op1,</span> <span class="pre">value1),</span> <span class="pre">..])}</span></tt></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>act</strong> &#8211; dialogue act in string</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<p class="last">SummaryAction is not implemented.</p>
+</div>
+<dl class="method">
+<dt id="utils.DiaAct.DiaAct.append">
+<tt class="descname">append</tt><big>(</big><em>slot</em>, <em>value</em>, <em>negate=False</em><big>)</big><a class="headerlink" href="#utils.DiaAct.DiaAct.append" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add item to this act avoiding duplication</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>slot</strong> (<em>str</em>) &#8211; None</li>
+<li><strong>value</strong> (<em>str</em>) &#8211; None</li>
+<li><strong>negate</strong> (<em>bool [Default=False]</em>) &#8211; semantic operation is negation or not</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="utils.DiaAct.DiaAct.append_front">
+<tt class="descname">append_front</tt><big>(</big><em>slot</em>, <em>value</em>, <em>negate=False</em><big>)</big><a class="headerlink" href="#utils.DiaAct.DiaAct.append_front" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add item to this act avoiding duplication</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>slot</strong> (<em>str</em>) &#8211; None</li>
+<li><strong>value</strong> (<em>str</em>) &#8211; None</li>
+<li><strong>negate</strong> (<em>bool</em>) &#8211; operation is &#8216;=&#8217; or not?  False by default.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="utils.DiaAct.DiaAct.contains">
+<tt class="descname">contains</tt><big>(</big><em>slot</em>, <em>value</em>, <em>negate=False</em><big>)</big><a class="headerlink" href="#utils.DiaAct.DiaAct.contains" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>slot</strong> (<em>str</em>) &#8211; None</li>
+<li><strong>value</strong> (<em>str</em>) &#8211; None</li>
+<li><strong>negate</strong> (<em>bool - default False</em>) &#8211; None</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">(bool) is full semantic act in self.items?</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="utils.DiaAct.DiaAct.contains_slot">
+<tt class="descname">contains_slot</tt><big>(</big><em>slot</em><big>)</big><a class="headerlink" href="#utils.DiaAct.DiaAct.contains_slot" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>slot</strong> (<em>str</em>) &#8211; slot name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">(bool) answering whether self.items mentions slot</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="utils.DiaAct.DiaAct.getDiaItemFormat">
+<tt class="descname">getDiaItemFormat</tt><big>(</big><big>)</big><a class="headerlink" href="#utils.DiaAct.DiaAct.getDiaItemFormat" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>None</strong> (<em>based on self.items</em>) &#8211; None</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the number of arguments of this diaact type. e.g. act: 0, act(slot): 1, act(slot,value): 2</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="utils.DiaAct.DiaAct.get_value">
+<tt class="descname">get_value</tt><big>(</big><em>slot</em>, <em>negate=False</em><big>)</big><a class="headerlink" href="#utils.DiaAct.DiaAct.get_value" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>slot</strong> (<em>str</em>) &#8211; slot name</li>
+<li><strong>negate</strong> (<em>bool - default False</em>) &#8211; relating to semantic operation, i.e slot = or slot !=.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">(str) value</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="utils.DiaAct.DiaAct.get_values">
+<tt class="descname">get_values</tt><big>(</big><em>slot</em>, <em>negate=False</em><big>)</big><a class="headerlink" href="#utils.DiaAct.DiaAct.get_values" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>slot</strong> (<em>str</em>) &#8211; slot name</li>
+<li><strong>negate</strong> (<em>bool - default False</em>) &#8211; <ul>
+<li>semantic operation</li>
+</ul>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">(list) values in self.items</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="utils.DiaAct.DiaAct.has_conflicting_value">
+<tt class="descname">has_conflicting_value</tt><big>(</big><em>constraints</em><big>)</big><a class="headerlink" href="#utils.DiaAct.DiaAct.has_conflicting_value" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>constraints</strong> (<em>list</em>) &#8211; as  [(slot, op, value), ...]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">(bool) True if this DiaAct has values which conflict with the given constraints. Note that consider
+only non-name slots.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="utils.DiaAct.DiaAct.to_string">
+<tt class="descname">to_string</tt><big>(</big><big>)</big><a class="headerlink" href="#utils.DiaAct.DiaAct.to_string" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>None</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">(str) semantic act</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="utils.DiaAct.DiaActWithProb">
+<em class="property">class </em><tt class="descclassname">utils.DiaAct.</tt><tt class="descname">DiaActWithProb</tt><big>(</big><em>act</em><big>)</big><a class="headerlink" href="#utils.DiaAct.DiaActWithProb" title="Permalink to this definition">¶</a></dt>
+<dd><p>self.dact = <tt class="docutils literal"><span class="pre">{'act':</span> <span class="pre">acttype,'slots':</span> <span class="pre">set([(slot1,</span> <span class="pre">value1),</span> <span class="pre">..])}</span></tt></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>act</strong> (<em>str</em>) &#8211; dialogue act</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-todo admonition" id="index-1">
+<p class="first admonition-title">Todo</p>
+<p class="last">Parser is not complete. Attached probability P_Au_O cannot be parsed.
+SummaryAction is not implemented.
+Emphasis and operator are not implemented.</p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="utils.DiaAct.known_format">
+<tt class="descclassname">utils.DiaAct.</tt><tt class="descname">known_format</tt><em class="property"> = {'repeat': 0, 'confreq': 1, 'thankyou': 0, 'negate': 2, 'null': 0, 'select': 3, 'deny': 3, 'confirm': 2, 'affirm': 2, 'request': 1, 'badact': 0, 'inform': 2, 'reqalts': 2, 'bye': 0, 'hello': 0}</em><a class="headerlink" href="#utils.DiaAct.known_format" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>within class dictionary</strong></p>
+<p>0 signals no dia item, eg hello()
+1 signals slot, but no value, eg request(bar)
+2 signals slot value pair, eg inform(food=&#8221;Italian&#8221;)
+3 signals 2 slot value pairs, eg deny(food=&#8221;Italian&#8221;, food=&#8221;Chinese&#8221;)</p>
+</dd></dl>
+
+</div>
+<span class="target" id="module-utils.dummyDialogueServerClient"></span><p>A basic script for talking to the dialogue server via cmd line, i.e. without using any voice broker. 
+&gt;&gt; python dummyDialogueServerClient.py user</p>
+<p>Also can be used to simulate multiple concurrent calls to a running DialogueServer() - each of these is run in it&#8217;s own
+process via python&#8217;s multiprocessing module.
+&gt;&gt; python dummyDialogueServerClient.py fake number_of_fake_clients</p>
+<p>&#8212; where number_of_fake_clients is an integer.</p>
+<p>NB: This was just a tool I wrote for developing DialogueServer, but it is actually pretty useful so i&#8217;ve put it in the repo and it
+is also used by nosetests now to execute some basic testing of DialogueServer.</p>
+<dl class="class">
+<dt id="utils.dummyDialogueServerClient.fake_client">
+<em class="property">class </em><tt class="descclassname">utils.dummyDialogueServerClient.</tt><tt class="descname">fake_client</tt><big>(</big><em>user_in</em>, <em>hostname='localhost'</em>, <em>port=8082</em><big>)</big><a class="headerlink" href="#utils.dummyDialogueServerClient.fake_client" title="Permalink to this definition">¶</a></dt>
+<dd><p>text based client for interacting with DialogueServer via the cmd line</p>
+</dd></dl>
+
+<span class="target" id="module-utils.Scanner"></span><div class="section" id="scanner-py-string-scanning-utility">
+<h2>Scanner.py - string scanning utility<a class="headerlink" href="#scanner-py-string-scanning-utility" title="Permalink to this headline">¶</a></h2>
+<p>Copyright CUED Dialogue Systems Group 2015, 2016</p>
+<hr class="docutils" />
+<dl class="function">
+<dt id="utils.Scanner.remove_comments">
+<tt class="descclassname">utils.Scanner.</tt><tt class="descname">remove_comments</tt><big>(</big><em>src</em><big>)</big><a class="headerlink" href="#utils.Scanner.remove_comments" title="Permalink to this definition">¶</a></dt>
+<dd><p>This reads tokens using tokenize.generate_tokens and recombines them
+using tokenize.untokenize, and skipping comment/docstring tokens in between</p>
+</dd></dl>
+
+</div>
+<span class="target" id="module-utils.Settings"></span><div class="section" id="settings-py-global-variables-config-random-num-generator">
+<h2>Settings.py - global variables: config, random num generator<a class="headerlink" href="#settings-py-global-variables-config-random-num-generator" title="Permalink to this headline">¶</a></h2>
+<p>Copyright CUED Dialogue Systems Group 2015, 2016</p>
+<p>Creates and makes accessible system wide a config parser and random number generator.
+Also contains hardcodings of the paths to the ontologies.</p>
+<dl class="docutils">
+<dt>[GENERAL]</dt>
+<dd>root = &#8216;&#8217;    - which is the path to root directory of python system. Use when running grid jobs.</dd>
+</dl>
+<p>Globals:</p>
+<div class="highlight-python"><pre>config:       python ConfigParser.ConfigParser() object
+random:       numpy.random.RandomState() random number generator
+root:         location of root directory of repository - for running on the grid</pre>
+</div>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>CUED Imports/Dependencies: </p>
+<p class="last">import <a class="reference internal" href="#module-utils.ContextLogger" title="utils.ContextLogger"><tt class="xref py py-class docutils literal"><span class="pre">utils.ContextLogger</span></tt></a></p>
+</div>
+<hr class="docutils" />
+<dl class="function">
+<dt id="utils.Settings.init">
+<tt class="descclassname">utils.Settings.</tt><tt class="descname">init</tt><big>(</big><em>config_file</em>, <em>seed=None</em><big>)</big><a class="headerlink" href="#utils.Settings.init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called by dialog programs (simulate, texthub, dialogueserver) to init Settings globals</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.Settings.load_config">
+<tt class="descclassname">utils.Settings.</tt><tt class="descname">load_config</tt><big>(</big><em>config_file</em><big>)</big><a class="headerlink" href="#utils.Settings.load_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads the passed config file into a python ConfigParser().</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config_file</strong> (<em>str</em>) &#8211; path to config</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.Settings.load_root">
+<tt class="descclassname">utils.Settings.</tt><tt class="descname">load_root</tt><big>(</big><em>rootIn=None</em><big>)</big><a class="headerlink" href="#utils.Settings.load_root" title="Permalink to this definition">¶</a></dt>
+<dd><p>root is the location (ie full path) of the cued-python repository. This is used when running things on the grid (non local 
+machines in general) -</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.Settings.locate_file">
+<tt class="descclassname">utils.Settings.</tt><tt class="descname">locate_file</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#utils.Settings.locate_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>locate file either as given or relative to root</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> &#8211; file to check</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">filename possibly prepended with root</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.Settings.set_seed">
+<tt class="descclassname">utils.Settings.</tt><tt class="descname">set_seed</tt><big>(</big><em>seed</em><big>)</big><a class="headerlink" href="#utils.Settings.set_seed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Intialise np random num generator</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>seed</strong> (<em>int</em>) &#8211; None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="../_static/../../../Docs/cued_logo.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyDial</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Adding.html">How to add content to these pages</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="GeneralNotes.html">General System  Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Agent.html">Agent - the Complete Dialogue System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BeliefTracking.html">Belief Tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Evaluation.html">Evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Ontology.html">Ontology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="NLGeneration.html">Natural Language Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policy.html">Policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SemanticParsing.html">Semantic Parsing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SemanticBeliefTracking.html">Semantic Belief Tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Simulation.html">Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Systems.html">Dialogue Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tests.html">Tests executed by nosetests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="TopicTracking.html">Topic Tracking</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Utility Modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#contextlogger-py-wrapper-for-python-logging-api">ContextLogger.py - wrapper for Python logging API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dact-py-dialogue-act-specification">dact.py - dialogue act specification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#diaact-py-dialogue-act-specification">DiaAct.py - dialogue act specification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scanner-py-string-scanning-utility">Scanner.py - string scanning utility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#settings-py-global-variables-config-random-num-generator">Settings.py - global variables: config, random num generator</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Papers.html">Interesting / Relevant Papers</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="TopicTracking.html" title="previous chapter">Topic Tracking</a></li>
+      <li>Next: <a href="Papers.html" title="next chapter">Interesting / Relevant Papers</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, Dongho Kim, David Vandyke, Lina Rojas, Milica Gasic, Stefan Ultes, Steve Young.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.1.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster </a>
+      
+      |
+      <a href="../_sources/Docs/Utilities.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

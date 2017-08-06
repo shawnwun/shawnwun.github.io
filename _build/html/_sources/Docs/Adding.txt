@@ -1,0 +1,28 @@
+*********************************
+How to add content to these pages
+*********************************
+
+.. note::
+    Firstly make sure you have sphinx installed: http://sphinx-doc.org/latest/install.html
+    as well as the sphinx-alabaster theme: https://github.com/bitprophet/alabaster
+
+The pages are hosted on LocalDocs but the content is all created within the Python git repository. So do the following in order to update:
+
+1. **git pull**
+2. Edit what you need to (see below for how to achieve this)
+3. **make html**
+4. **git push**
+5. Make sure you are on a filesystem that can `see` **/tools/WorldWideWeb/old/research/dialogue/LocalDocs**
+6. **bash /Docs/updateLocalDocs.sh**
+
+Step 3 creates/updates the HTML files (which can be found in your local directory **/_build/**).  Step 6 then copies these over to LocalDocs.
+
+You shouldn't have to do anything directly with Sphinx .rst files here. The documentation is all collected from the comments within the python code.
+The format is simple and the easiest way to understand is to look at a python functions docstring and compare to the sphinx generated html.
+Otherwise there are some useful links at the end of this page, or Google!
+Note that there is a file **conf.py** in the repository root which is the config for Sphinx, but there should be no need to modify this.
+
+References
+
+- http://sphinx-doc.org/
+- http://thomas-cokelaer.info/tutorials/sphinx/rest_syntax.html

@@ -1,0 +1,219 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Topic Tracking &mdash; PyDial 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="PyDial 1.0.0 documentation" href="../index.html" />
+    <link rel="next" title="Utility Modules" href="Utilities.html" />
+    <link rel="prev" title="Tests executed by nosetests" href="Tests.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="topic-tracking">
+<h1>Topic Tracking<a class="headerlink" href="#topic-tracking" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-topictracking.RuleTopicTrackers"></span><div class="section" id="ruletopictrackers-py-rule-based-topic-trackers">
+<h2>RuleTopicTrackers.py - Rule based topic trackers<a class="headerlink" href="#ruletopictrackers-py-rule-based-topic-trackers" title="Permalink to this headline">¶</a></h2>
+<p>Copyright CUED Dialogue Systems Group 2015, 2016</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>CUED Imports/Dependencies: </p>
+<p class="last">import <a class="reference internal" href="Utilities.html#module-utils.Settings" title="utils.Settings"><tt class="xref py py-class docutils literal"><span class="pre">utils.Settings</span></tt></a> <br />
+import <a class="reference internal" href="Utilities.html#module-utils.ContextLogger" title="utils.ContextLogger"><tt class="xref py py-class docutils literal"><span class="pre">utils.ContextLogger</span></tt></a></p>
+</div>
+<hr class="docutils" />
+<dl class="class">
+<dt id="topictracking.RuleTopicTrackers.KeywordSpottingTopicTracker">
+<em class="property">class </em><tt class="descclassname">topictracking.RuleTopicTrackers.</tt><tt class="descname">KeywordSpottingTopicTracker</tt><a class="headerlink" href="#topictracking.RuleTopicTrackers.KeywordSpottingTopicTracker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Just a hacky topic tracker to develop voicehub with. 
+:: Assumptions/Notes
+&#8211; To resolve resturants and hotels will also have to spot location
+&#8211; Assume we will stick with last domain unless we detect one of our keywords</p>
+<dl class="method">
+<dt id="topictracking.RuleTopicTrackers.KeywordSpottingTopicTracker.infer_domain">
+<tt class="descname">infer_domain</tt><big>(</big><em>userActHyps=None</em><big>)</big><a class="headerlink" href="#topictracking.RuleTopicTrackers.KeywordSpottingTopicTracker.infer_domain" title="Permalink to this definition">¶</a></dt>
+<dd><p>&#8211; Assumptions: Only working with the top hypothesis from ASR
+&#8211;              Stick to last domain if nothing spotted in this turn
+&#8211;              ORDER IS IMPORTANT &#8211; ie it will hand off to FIRST domain a keyword is spotted in</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="topictracking.RuleTopicTrackers.TextBasedSwitchTopicTracker">
+<em class="property">class </em><tt class="descclassname">topictracking.RuleTopicTrackers.</tt><tt class="descname">TextBasedSwitchTopicTracker</tt><a class="headerlink" href="#topictracking.RuleTopicTrackers.TextBasedSwitchTopicTracker" title="Permalink to this definition">¶</a></dt>
+<dd><p>When using texthub, you can enter: switch(&#8220;CamRestaurants&#8221;)  which will change domains to CamRestaurants for example.
+&#8211; if switch(&#8220;XX&#8221;) not entered, assumes you want to stay in domain of previous turn</p>
+<dl class="method">
+<dt id="topictracking.RuleTopicTrackers.TextBasedSwitchTopicTracker.infer_domain">
+<tt class="descname">infer_domain</tt><big>(</big><em>userActHyps=None</em><big>)</big><a class="headerlink" href="#topictracking.RuleTopicTrackers.TextBasedSwitchTopicTracker.infer_domain" title="Permalink to this definition">¶</a></dt>
+<dd><p>userActHyps : [(text, prob)]</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="topictracking.RuleTopicTrackers.TopicTrackerInterface">
+<em class="property">class </em><tt class="descclassname">topictracking.RuleTopicTrackers.</tt><tt class="descname">TopicTrackerInterface</tt><a class="headerlink" href="#topictracking.RuleTopicTrackers.TopicTrackerInterface" title="Permalink to this definition">¶</a></dt>
+<dd><p>Template for any Topic Tracker for the cued-python system</p>
+</dd></dl>
+
+</div>
+<span class="target" id="module-topictracking.TopicTracking"></span><div class="section" id="topictracking-py-topic-tracking-interface">
+<h2>TopicTracking.py -  Topic tracking interface<a class="headerlink" href="#topictracking-py-topic-tracking-interface" title="Permalink to this headline">¶</a></h2>
+<p>Copyright CUED Dialogue Systems Group 2015, 2016</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>CUED Imports/Dependencies: </p>
+<p class="last">import <a class="reference internal" href="Utilities.html#module-utils.Settings" title="utils.Settings"><tt class="xref py py-class docutils literal"><span class="pre">utils.Settings</span></tt></a> <br />
+import <a class="reference internal" href="Utilities.html#module-utils.ContextLogger" title="utils.ContextLogger"><tt class="xref py py-class docutils literal"><span class="pre">utils.ContextLogger</span></tt></a></p>
+</div>
+<hr class="docutils" />
+<dl class="class">
+<dt id="topictracking.TopicTracking.TopicTrackingManager">
+<em class="property">class </em><tt class="descclassname">topictracking.TopicTracking.</tt><tt class="descname">TopicTrackingManager</tt><a class="headerlink" href="#topictracking.TopicTracking.TopicTrackingManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interface for all topic tracking</p>
+<dl class="method">
+<dt id="topictracking.TopicTracking.TopicTrackingManager.restart">
+<tt class="descname">restart</tt><big>(</big><big>)</big><a class="headerlink" href="#topictracking.TopicTracking.TopicTrackingManager.restart" title="Permalink to this definition">¶</a></dt>
+<dd><p># Start with control where? Single domain &#8211;&gt; with its manager, Multi-Domain &#8211;&gt; with topicmanager</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="topictracking.TopicTracking.TopicTrackingManager.track_topic">
+<tt class="descname">track_topic</tt><big>(</big><em>userAct_hyps=None</em>, <em>domainString=None</em><big>)</big><a class="headerlink" href="#topictracking.TopicTracking.TopicTrackingManager.track_topic" title="Permalink to this definition">¶</a></dt>
+<dd><p># CURRENT ASSUMPTION: ONLY ONE DOMAIN CAN BE ACTIVE IN EACH TURN.
+Sets member variables: operatingDomain</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="../_static/../../../Docs/cued_logo.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyDial</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Adding.html">How to add content to these pages</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="GeneralNotes.html">General System  Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Agent.html">Agent - the Complete Dialogue System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BeliefTracking.html">Belief Tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Evaluation.html">Evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Ontology.html">Ontology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="NLGeneration.html">Natural Language Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policy.html">Policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SemanticParsing.html">Semantic Parsing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SemanticBeliefTracking.html">Semantic Belief Tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Simulation.html">Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Systems.html">Dialogue Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tests.html">Tests executed by nosetests</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Topic Tracking</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#ruletopictrackers-py-rule-based-topic-trackers">RuleTopicTrackers.py - Rule based topic trackers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#topictracking-py-topic-tracking-interface">TopicTracking.py -  Topic tracking interface</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Utilities.html">Utility Modules</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Papers.html">Interesting / Relevant Papers</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="Tests.html" title="previous chapter">Tests executed by nosetests</a></li>
+      <li>Next: <a href="Utilities.html" title="next chapter">Utility Modules</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, Dongho Kim, David Vandyke, Lina Rojas, Milica Gasic, Stefan Ultes, Steve Young.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.1.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster </a>
+      
+      |
+      <a href="../_sources/Docs/TopicTracking.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

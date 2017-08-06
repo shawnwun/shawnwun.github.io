@@ -1,0 +1,264 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>General System Notes &mdash; PyDial 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="PyDial 1.0.0 documentation" href="../index.html" />
+    <link rel="next" title="Agent - the Complete Dialogue System" href="Agent.html" />
+    <link rel="prev" title="How to add content to these pages" href="Adding.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="general-system-notes">
+<h1>General System  Notes<a class="headerlink" href="#general-system-notes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="config-files">
+<h2>Config files<a class="headerlink" href="#config-files" title="Permalink to this headline">¶</a></h2>
+<p>Firstly, all configs are formatted based on the python <strong>ConfigParser</strong> module. The <strong>/config</strong> directory in the repository has working configs for several scenarios.  Some key config sections are described below:</p>
+<div class="section" id="default">
+<h3>[DEFAULT]<a class="headerlink" href="#default" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><dl class="first docutils">
+<dt>root = &#8216;&#8217;</dt>
+<dd><p class="first last"><em>git repo root. Used when running on grid etc.</em></p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>domains = CamRestaurants,Laptops11</dt>
+<dd><p class="first last"><em>List of domain tags that can occur in simulate dialog. Policy options for each domain tag should also be set in the config (see below).</em></p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>conditionalsimuser = True</dt>
+<dd><p class="first last"><em>Boolean controlling whether each domain is treated independently or conditionally by the multidomain simulated user manager</em></p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>maxdomainsperdialog = 3</dt>
+<dd><p class="first last"><em>However many domain tags are given by the above domains config setting, this sets a limit on how many domains can be involved in each dialog</em></p>
+</dd>
+</dl>
+</li>
+</ul>
+<dl class="docutils">
+<dt>[voicehub]</dt>
+<dd>Check the name of the host and port where the dialogue server will be running. Then set the host and port in the config
+files of the VoiceServer and the dialogue server: The variables dialhost, dialport must be set.
+Run the dialogue server: python DialogueServer.py -C /config/voicehub.cfg
+Run Cornelia (VoiceServer) and wait for a call.
+See _a link: <a class="reference external" href="https://lmr46&#64;bitbucket.org/lmr46/voiceserver.git">https://lmr46&#64;bitbucket.org/lmr46/voiceserver.git</a></dd>
+</dl>
+</div>
+<div class="section" id="policy">
+<h3>[policy]<a class="headerlink" href="#policy" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>bcm</li>
+</ul>
+<p>This section, [policy], is the only policy config section that is domain independent. The policy settings for each domain are set with <strong>DOMAINTAGS</strong> as shown below.
+Note that a list of domain tags may be found in <strong>Settings.py</strong>.</p>
+</div>
+<div class="section" id="policy-domaintag">
+<h3>[policy_DOMAINTAG]<a class="headerlink" href="#policy-domaintag" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>belieftype = focus</li>
+<li>useconfreq = False</li>
+<li>policytype = gp</li>
+<li>learning = True</li>
+<li>startwithhello = False</li>
+<li>inpolicyfile = test   <em>&#8212;-If not set, but learning, then starts from a pure random policy</em></li>
+<li>outpolicyfile = _gptraining/out-gpCamRestaurants</li>
+</ul>
+</div>
+<div class="section" id="gppolicy-domaintag">
+<h3>[gppolicy_DOMAINTAG]<a class="headerlink" href="#gppolicy-domaintag" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>kernel = polysort</li>
+</ul>
+</div>
+<div class="section" id="gpsarsa-domaintag">
+<h3>[gpsarsa_DOMAINTAG]<a class="headerlink" href="#gpsarsa-domaintag" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>random = False</li>
+<li>scale = 3</li>
+<li>saveasprior = True</li>
+<li>numprior = 1</li>
+</ul>
+</div>
+<div class="section" id="logging">
+<h3>[logging]<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><dl class="first docutils">
+<dt>usecolor = True</dt>
+<dd><p class="first last"><em>Boolean indicating whether logger should print output in color or not. A general point to note, when dumping simulate.py runs to file, the context logger output colour indcators are dumped as ugly ASCII characters that appear everywhere. User the flag</em> <strong>&#8211;nocolor</strong> <em>to run the context logger in black and white and get a presentable file.</em></p>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="running-policy-training-via-simulate-on-the-grid">
+<h2>Running policy training via simulate on the grid<a class="headerlink" href="#running-policy-training-via-simulate-on-the-grid" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">Some scripts are available in <strong>./scripts/</strong>. This included GP training/testing scripts and printing tools for
+grid training.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">these are bare bones and still need work for extra functionality, (saveasprior for example)</p>
+</div>
+</li>
+<li><p class="first">Note that the HPC facilities are also available.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="the-original-single-domain-system">
+<h2>The original single-domain system<a class="headerlink" href="#the-original-single-domain-system" title="Permalink to this headline">¶</a></h2>
+<p>The original python system that Dongho Kim wrote it noted with the git tag <strong>dksystem</strong>.
+This system assumed you would only be running simulate, texthub etc in the one single domain.</p>
+<p>You can access it via the git tag, checking it out onto a new branch as follows:</p>
+<div class="highlight-python"><pre>&gt;&gt; git checkout -b &lt;BRANCH-NAME&gt;  dksystem</pre>
+</div>
+<p>where &lt;BRANCH-NAME&gt; is your choice.</p>
+</div>
+<div class="section" id="todo-system-is-currently-missing-the-following">
+<h2>TODO - System is currently missing the following:<a class="headerlink" href="#todo-system-is-currently-missing-the-following" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>RNN tracker</li>
+<li>Generator</li>
+<li>RNN evaluator</li>
+<li>SemI system if not using RNN(ASR input) tracker in full system/for trials</li>
+<li>working topic tracker</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="../_static/../../../Docs/cued_logo.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyDial</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Adding.html">How to add content to these pages</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">General System  Notes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#config-files">Config files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-policy-training-via-simulate-on-the-grid">Running policy training via simulate on the grid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-original-single-domain-system">The original single-domain system</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#todo-system-is-currently-missing-the-following">TODO - System is currently missing the following:</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Agent.html">Agent - the Complete Dialogue System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BeliefTracking.html">Belief Tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Evaluation.html">Evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Ontology.html">Ontology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="NLGeneration.html">Natural Language Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policy.html">Policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SemanticParsing.html">Semantic Parsing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SemanticBeliefTracking.html">Semantic Belief Tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Simulation.html">Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Systems.html">Dialogue Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tests.html">Tests executed by nosetests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="TopicTracking.html">Topic Tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Utilities.html">Utility Modules</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Papers.html">Interesting / Relevant Papers</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="Adding.html" title="previous chapter">How to add content to these pages</a></li>
+      <li>Next: <a href="Agent.html" title="next chapter">Agent - the Complete Dialogue System</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, Dongho Kim, David Vandyke, Lina Rojas, Milica Gasic, Stefan Ultes, Steve Young.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.1.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster </a>
+      
+      |
+      <a href="../_sources/Docs/GeneralNotes.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

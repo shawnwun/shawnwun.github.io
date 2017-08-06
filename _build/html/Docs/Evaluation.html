@@ -1,0 +1,394 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Evaluation &mdash; PyDial 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="PyDial 1.0.0 documentation" href="../index.html" />
+    <link rel="next" title="Ontology" href="Ontology.html" />
+    <link rel="prev" title="Belief Tracking" href="BeliefTracking.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="evaluation">
+<h1>Evaluation<a class="headerlink" href="#evaluation" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-evaluation.EvaluationManager"></span><div class="section" id="evaluationmanager-py-module-for-determining-the-reward">
+<h2>EvaluationManager.py - module for determining the reward<a class="headerlink" href="#evaluationmanager-py-module-for-determining-the-reward" title="Permalink to this headline">¶</a></h2>
+<p>Copyright CUED Dialogue Systems Group 2015, 2016</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>CUED Imports/Dependencies: </p>
+<p class="last">import <a class="reference internal" href="Ontology.html#module-ontology.OntologyUtils" title="ontology.OntologyUtils"><tt class="xref py py-mod docutils literal"><span class="pre">ontology.OntologyUtils</span></tt></a> <br />
+import <a class="reference internal" href="Utilities.html#module-utils.Settings" title="utils.Settings"><tt class="xref py py-mod docutils literal"><span class="pre">utils.Settings</span></tt></a> <br />
+import <a class="reference internal" href="Utilities.html#module-utils.ContextLogger" title="utils.ContextLogger"><tt class="xref py py-mod docutils literal"><span class="pre">utils.ContextLogger</span></tt></a></p>
+</div>
+<hr class="docutils" />
+<dl class="class">
+<dt id="evaluation.EvaluationManager.EvaluationManager">
+<em class="property">class </em><tt class="descclassname">evaluation.EvaluationManager.</tt><tt class="descname">EvaluationManager</tt><a class="headerlink" href="#evaluation.EvaluationManager.EvaluationManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>The evaluation manager manages the evaluators for all domains. It supports two types of reward: a turn-level reward and a dialogue-level reward. 
+The former is accessed using <a class="reference internal" href="#evaluation.EvaluationManager.EvaluationManager.turnReward" title="evaluation.EvaluationManager.EvaluationManager.turnReward"><tt class="xref py py-func docutils literal"><span class="pre">turnReward()</span></tt></a> and the latter using <a class="reference internal" href="#evaluation.EvaluationManager.EvaluationManager.finalReward" title="evaluation.EvaluationManager.EvaluationManager.finalReward"><tt class="xref py py-func docutils literal"><span class="pre">finalReward()</span></tt></a>.
+You can either use one or both methods for reward computing.</p>
+<p>An example where both are used in the traditional reward computation where each turn is penalised with a small negative reward (which is realised with <a class="reference internal" href="#evaluation.EvaluationManager.EvaluationManager.turnReward" title="evaluation.EvaluationManager.EvaluationManager.turnReward"><tt class="xref py py-func docutils literal"><span class="pre">turnReward()</span></tt></a>)
+and in the end, the dialogue is rewarded with a big positive reward given the overall dialogue (which is realised with <a class="reference internal" href="#evaluation.EvaluationManager.EvaluationManager.finalReward" title="evaluation.EvaluationManager.EvaluationManager.finalReward"><tt class="xref py py-func docutils literal"><span class="pre">finalReward()</span></tt></a>).</p>
+<dl class="method">
+<dt id="evaluation.EvaluationManager.EvaluationManager._bootup_domain">
+<tt class="descname">_bootup_domain</tt><big>(</big><em>dstring</em><big>)</big><a class="headerlink" href="#evaluation.EvaluationManager.EvaluationManager._bootup_domain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ensures that the respective domain&#8217;s evaluator is booted up correctly and resets it.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dstring</strong> (<em>str</em>) &#8211; the domain of which the evaulator should be booted.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="evaluation.EvaluationManager.EvaluationManager._load_domains_evaluator">
+<tt class="descname">_load_domains_evaluator</tt><big>(</big><em>domainString=None</em><big>)</big><a class="headerlink" href="#evaluation.EvaluationManager.EvaluationManager._load_domains_evaluator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads and instantiates the respective evaluator as configured in config file. The new object is added to the internal
+dictionary.</p>
+<p>Default is &#8216;objective&#8217;.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>domainString</strong> (<em>str</em>) &#8211; the domain the evaluator will work on. Default is None.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="evaluation.EvaluationManager.EvaluationManager.finalReward">
+<tt class="descname">finalReward</tt><big>(</big><em>domainString</em>, <em>finalInfo</em><big>)</big><a class="headerlink" href="#evaluation.EvaluationManager.EvaluationManager.finalReward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the final reward for the given domain using finalInfo by delegating to the domain evaluator.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>domainString</strong> (<em>str</em>) &#8211; the domain string unique identifier.</li>
+<li><strong>finalInfo</strong> (<em>dict</em>) &#8211; parameters necessary for computing the final reward, eg., task description or subjective feedback.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">int &#8211; the final reward for the given domain.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="evaluation.EvaluationManager.EvaluationManager.finalRewards">
+<tt class="descname">finalRewards</tt><big>(</big><em>finalInfo=None</em><big>)</big><a class="headerlink" href="#evaluation.EvaluationManager.EvaluationManager.finalRewards" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the <a class="reference internal" href="#evaluation.EvaluationManager.EvaluationManager.finalReward" title="evaluation.EvaluationManager.EvaluationManager.finalReward"><tt class="xref py py-func docutils literal"><span class="pre">finalReward()</span></tt></a> method for all domains where it has not been computed yet.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>finalInfo</strong> (<em>dict</em>) &#8211; parameters necessary for computing the final rewards, eg., task description or subjective feedback. Default is None</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">dict &#8211; mapping of domain to final rewards</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="evaluation.EvaluationManager.EvaluationManager.print_dialog_summary">
+<tt class="descname">print_dialog_summary</tt><big>(</big><big>)</big><a class="headerlink" href="#evaluation.EvaluationManager.EvaluationManager.print_dialog_summary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints the history of the just completed dialog.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="evaluation.EvaluationManager.EvaluationManager.print_summary">
+<tt class="descname">print_summary</tt><big>(</big><big>)</big><a class="headerlink" href="#evaluation.EvaluationManager.EvaluationManager.print_summary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints the history over all dialogs run thru simulate.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="evaluation.EvaluationManager.EvaluationManager.restart">
+<tt class="descname">restart</tt><big>(</big><big>)</big><a class="headerlink" href="#evaluation.EvaluationManager.EvaluationManager.restart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Restarts all domain evaluators.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="evaluation.EvaluationManager.EvaluationManager.turnReward">
+<tt class="descname">turnReward</tt><big>(</big><em>domainString</em>, <em>turnInfo</em><big>)</big><a class="headerlink" href="#evaluation.EvaluationManager.EvaluationManager.turnReward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the turn reward for the given domain using turnInfo by delegating to the domain evaluator.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>domainString</strong> (<em>str</em>) &#8211; the domain string unique identifier.</li>
+<li><strong>turnInfo</strong> (<em>dict</em>) &#8211; parameters necessary for computing the turn reward, eg., system act or model of the simulated user.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">int &#8211; the turn reward for the given domain.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="evaluation.EvaluationManager.Evaluator">
+<em class="property">class </em><tt class="descclassname">evaluation.EvaluationManager.</tt><tt class="descname">Evaluator</tt><big>(</big><em>domainString</em><big>)</big><a class="headerlink" href="#evaluation.EvaluationManager.Evaluator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interface class for a single domain evaluation module. Responsible for recording/calculating turns, dialogue outcome, reward for a single 
+dialog. To create your own reward model, derive from this class and depending on your requirements override the methods <a class="reference internal" href="#evaluation.EvaluationManager.Evaluator._getTurnReward" title="evaluation.EvaluationManager.Evaluator._getTurnReward"><tt class="xref py py-func docutils literal"><span class="pre">_getTurnReward()</span></tt></a> and <a class="reference internal" href="#evaluation.EvaluationManager.Evaluator._getFinalReward" title="evaluation.EvaluationManager.Evaluator._getFinalReward"><tt class="xref py py-func docutils literal"><span class="pre">_getFinalReward()</span></tt></a>.</p>
+<dl class="method">
+<dt id="evaluation.EvaluationManager.Evaluator._getFinalReward">
+<tt class="descname">_getFinalReward</tt><big>(</big><em>finalInfo</em><big>)</big><a class="headerlink" href="#evaluation.EvaluationManager.Evaluator._getFinalReward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the final reward using finalInfo and sets the dialogue outcome.</p>
+<p>Should be overridden by sub-class if values others than 0 should be returned.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>finalInfo</strong> (<em>dict</em>) &#8211; parameters necessary for computing the final reward, eg., task description or subjective feedback.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">int &#8211; the final reward, default 0.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="evaluation.EvaluationManager.Evaluator._getTurnReward">
+<tt class="descname">_getTurnReward</tt><big>(</big><em>turnInfo</em><big>)</big><a class="headerlink" href="#evaluation.EvaluationManager.Evaluator._getTurnReward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the turn reward using turnInfo.</p>
+<p>Should be overridden by sub-class if values others than 0 should be returned.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>turnInfo</strong> (<em>dict</em>) &#8211; parameters necessary for computing the turn reward, eg., system act or model of the simulated user.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">int &#8211; the turn reward, default 0.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="evaluation.EvaluationManager.Evaluator.finalReward">
+<tt class="descname">finalReward</tt><big>(</big><em>finalInfo</em><big>)</big><a class="headerlink" href="#evaluation.EvaluationManager.Evaluator.finalReward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the final reward using finalInfo by calling <a class="reference internal" href="#evaluation.EvaluationManager.Evaluator._getFinalReward" title="evaluation.EvaluationManager.Evaluator._getFinalReward"><tt class="xref py py-func docutils literal"><span class="pre">_getFinalReward()</span></tt></a>. Updates total reward and dialogue outcome</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>finalInfo</strong> (<em>dict</em>) &#8211; parameters necessary for computing the final reward, eg., task description or subjective feedback.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">int &#8211; the final reward.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="evaluation.EvaluationManager.Evaluator.print_dialog_summary">
+<tt class="descname">print_dialog_summary</tt><big>(</big><big>)</big><a class="headerlink" href="#evaluation.EvaluationManager.Evaluator.print_dialog_summary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints a summary of the current dialogue. Assumes dialogue outcome represents success. For other types, override methods in sub-class.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="evaluation.EvaluationManager.Evaluator.print_summary">
+<tt class="descname">print_summary</tt><big>(</big><big>)</big><a class="headerlink" href="#evaluation.EvaluationManager.Evaluator.print_summary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints the summary of a run - ie multiple dialogs. Assumes dialogue outcome represents success. For other types, override methods in sub-class.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="evaluation.EvaluationManager.Evaluator.restart">
+<tt class="descname">restart</tt><big>(</big><big>)</big><a class="headerlink" href="#evaluation.EvaluationManager.Evaluator.restart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the domain evaluators internal variables. 
+:param: None
+:returns None:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="evaluation.EvaluationManager.Evaluator.turnReward">
+<tt class="descname">turnReward</tt><big>(</big><em>turnInfo</em><big>)</big><a class="headerlink" href="#evaluation.EvaluationManager.Evaluator.turnReward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the turn reward using turnInfo by calling <a class="reference internal" href="#evaluation.EvaluationManager.Evaluator._getTurnReward" title="evaluation.EvaluationManager.Evaluator._getTurnReward"><tt class="xref py py-func docutils literal"><span class="pre">_getTurnReward()</span></tt></a>. Updates total reward and number of turns</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>turnInfo</strong> (<em>dict</em>) &#8211; parameters necessary for computing the turn reward, eg., system act or model of the simulated user.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">int &#8211; the turn reward.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<span class="target" id="module-evaluation.SuccessEvaluator"></span><div class="section" id="successevaluator-py-module-for-determining-objective-and-subjective-dialogue-success">
+<h2>SuccessEvaluator.py - module for determining objective and subjective dialogue success<a class="headerlink" href="#successevaluator-py-module-for-determining-objective-and-subjective-dialogue-success" title="Permalink to this headline">¶</a></h2>
+<p>Copyright CUED Dialogue Systems Group 2016</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>CUED PyDial Imports/Dependencies: </p>
+<p class="last">import <a class="reference internal" href="Utilities.html#module-utils.Settings" title="utils.Settings"><tt class="xref py py-mod docutils literal"><span class="pre">utils.Settings</span></tt></a> <br />
+import <a class="reference internal" href="Utilities.html#module-utils.ContextLogger" title="utils.ContextLogger"><tt class="xref py py-mod docutils literal"><span class="pre">utils.ContextLogger</span></tt></a> <br />
+import <a class="reference internal" href="Ontology.html#module-ontology.Ontology" title="ontology.Ontology"><tt class="xref py py-mod docutils literal"><span class="pre">ontology.Ontology</span></tt></a> <br />
+import <a class="reference internal" href="#evaluation.EvaluationManager.Evaluator" title="evaluation.EvaluationManager.Evaluator"><tt class="xref py py-class docutils literal"><span class="pre">evaluation.EvaluationManager.Evaluator</span></tt></a></p>
+</div>
+</div>
+<hr class="docutils" />
+<dl class="class">
+<dt id="evaluation.SuccessEvaluator.ObjectiveSuccessEvaluator">
+<em class="property">class </em><tt class="descclassname">evaluation.SuccessEvaluator.</tt><tt class="descname">ObjectiveSuccessEvaluator</tt><big>(</big><em>domainString</em><big>)</big><a class="headerlink" href="#evaluation.SuccessEvaluator.ObjectiveSuccessEvaluator" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class provides a reward model based on objective success. For simulated dialogues, the goal of the user simulator is compared with the the information the system has provided. 
+For dialogues with a task file, the task is compared to the information the system has provided.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="evaluation.SuccessEvaluator.SubjectiveSuccessEvaluator">
+<em class="property">class </em><tt class="descclassname">evaluation.SuccessEvaluator.</tt><tt class="descname">SubjectiveSuccessEvaluator</tt><big>(</big><em>domainString</em><big>)</big><a class="headerlink" href="#evaluation.SuccessEvaluator.SubjectiveSuccessEvaluator" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class implements a reward model based on subjective success which is only possible during voice interaction through the <a class="reference internal" href="Systems.html#module-DialogueServer" title="DialogueServer"><tt class="xref py py-mod docutils literal"><span class="pre">DialogueServer</span></tt></a>. The subjective feedback is collected and
+passed on to this class.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="../_static/../../../Docs/cued_logo.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyDial</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Adding.html">How to add content to these pages</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="GeneralNotes.html">General System  Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Agent.html">Agent - the Complete Dialogue System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BeliefTracking.html">Belief Tracking</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Evaluation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#evaluationmanager-py-module-for-determining-the-reward">EvaluationManager.py - module for determining the reward</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#successevaluator-py-module-for-determining-objective-and-subjective-dialogue-success">SuccessEvaluator.py - module for determining objective and subjective dialogue success</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Ontology.html">Ontology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="NLGeneration.html">Natural Language Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policy.html">Policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SemanticParsing.html">Semantic Parsing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SemanticBeliefTracking.html">Semantic Belief Tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Simulation.html">Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Systems.html">Dialogue Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tests.html">Tests executed by nosetests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="TopicTracking.html">Topic Tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Utilities.html">Utility Modules</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Papers.html">Interesting / Relevant Papers</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="BeliefTracking.html" title="previous chapter">Belief Tracking</a></li>
+      <li>Next: <a href="Ontology.html" title="next chapter">Ontology</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, Dongho Kim, David Vandyke, Lina Rojas, Milica Gasic, Stefan Ultes, Steve Young.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.1.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster </a>
+      
+      |
+      <a href="../_sources/Docs/Evaluation.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
